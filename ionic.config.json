@@ -1,0 +1,7 @@
+{
+  "name": "PERSPICTO-IONIC-MAPBOX",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
