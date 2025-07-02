@@ -70,12 +70,12 @@ const MapboxMapHome: React.FC = () => {
       container: mapContainer.current,
       style: 'mapbox://styles/perspictouser/cmc3eah7o00hm01qy1h5jgdvz', // URL mapbox diseñado
       center: [-74.006, 40.7128],
-      zoom: 12,
-      dragPan: true,
-      scrollZoom: false,
-      doubleClickZoom: false,
-      touchZoomRotate: false,
-      boxZoom: false,
+      zoom: 1,
+      dragPan: false,
+      scrollZoom: true,
+      doubleClickZoom: true,
+      touchZoomRotate: true,
+      boxZoom: true,
     });
 
     return () => {

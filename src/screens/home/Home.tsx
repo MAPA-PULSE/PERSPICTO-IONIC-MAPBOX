@@ -1,12 +1,23 @@
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import './Home.css';
+import MapboxMapHome from '../../components/MapboxHome';
 import React from 'react';
-import { IonPage, IonContent } from '@ionic/react'; 
 
 const Home: React.FC = () => {
-  return (  
+  return (
     <IonPage>
-      <IonContent>
-        <h1>Home Screen</h1>
-        <p>Welcome to the Home Screen!</p>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Home</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent fullscreen>
+        <IonHeader collapse="condense">
+          <IonToolbar>
+            <IonTitle size="large">Tab 1</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <MapboxMapHome />
       </IonContent>
     </IonPage>
   );
