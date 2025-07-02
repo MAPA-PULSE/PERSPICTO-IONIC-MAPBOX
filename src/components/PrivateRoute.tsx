@@ -1,17 +1,14 @@
-import { useEffect, useState } from "react";
-import { Redirect  } from "react-router-dom";
-import { onAuthStateChanged } from "firebase/auth";
+import React, { useEffect, useState } from "react";
+import { Route, Redirect, RouteProps } from "react-router-dom";
+import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../firebase";
-import React from "react";
 
-
-interface Props {
-  children: React.ReactNode;
+interface PrivateRouteProps extends RouteProps {
+  component: React.ComponentType<any>;
 }
 
-
-const PrivateRoute: React.FC<Props> = ({ children }) => {
-  const [user, setUser] = useState<null | object>(null);
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, ...rest }) => {
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,9 +19,22 @@ const PrivateRoute: React.FC<Props> = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  return user ? children : <Redirect to="/pages/login" />;
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        user ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/home" />
+        )
+      }
+    />
+  );
 };
 
 export default PrivateRoute;

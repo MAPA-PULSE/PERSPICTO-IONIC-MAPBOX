@@ -86,16 +86,57 @@
 
 // export default App;
 
+
+
+
+
+
 import React from "react";
-import { IonApp } from "@ionic/react";
+// import { IonApp } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import AppRoutes from "./routes/AppRoutes";
+/* Optional CSS utils that can be commented out */
+import '@ionic/react/css/padding.css';
+import '@ionic/react/css/float-elements.css';
+import '@ionic/react/css/text-alignment.css';
+import '@ionic/react/css/text-transformation.css';
+import '@ionic/react/css/flex-utils.css';
+import '@ionic/react/css/display.css';
+
+//  * Ionic Dark Mode
+//  * -----------------------------------------------------
+//  * For more info, please see:
+//  * https://ionicframework.com/docs/theming/dark-mode
+//  */
+
+import '@ionic/react/css/palettes/dark.always.css'; 
+import '@ionic/react/css/palettes/dark.class.css';
+import '@ionic/react/css/palettes/dark.system.css';
+
+import { Redirect, Route } from 'react-router-dom';
+import {
+  IonApp,
+  IonIcon,
+  IonLabel,
+  IonRouterOutlet,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+  setupIonicReact
+} from '@ionic/react';
+
+/* Core CSS required for Ionic components to work properly */
+import '@ionic/react/css/core.css';
+
+
+import './theme/variables.css';
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <AppRoutes />
     </IonReactRouter>
+  
   </IonApp>
 );
 
