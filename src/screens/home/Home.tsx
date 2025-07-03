@@ -13,9 +13,9 @@ const Home: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
-          </IonToolbar>
+          {/* <IonToolbar> */}
+            {/* <IonTitle size="large">Tab 1</IonTitle> */}
+          {/* </IonToolbar> */}
         </IonHeader>
         <MapboxMapHome />
       </IonContent>
