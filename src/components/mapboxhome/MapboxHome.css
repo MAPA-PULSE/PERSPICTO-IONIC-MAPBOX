@@ -1,0 +1,53 @@
+/* MapboxMapHome.css */
+
+ .map-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0; /* Asegura que el mapa esté detrás de otros elementos */
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+} 
+
+/* Contenedor donde se monta Mapbox */
+.map-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Título flotante */
+.title-overlay {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: white;
+
+  /* Fondo con degradado para un toque más elegante */
+  padding: 12px 30px;
+  border-radius: 8px; 
+  position: fixed;
+
+
+  /* Sombra para que el texto resalte más */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+ /* Desenfoque del fondo para mejor legibilidad */
+  backdrop-filter: blur(6px);
+  /* Opcional: letra con un poco de espacio */
+  letter-spacing: 0.15rem;
+}
+
+
+@media (max-width: 768px) {
+  .title-overlay {
+    font-size: 4.1rem;
+    padding: 8px 12px;
+    top: 5rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

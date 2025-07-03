@@ -1,6 +1,6 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Home.css';
-import MapboxMapHome from '../../components/MapboxHome';
+import MapboxMapHome from '../../components/mapboxhome/MapboxHome';
 import React from 'react';
 
 const Home: React.FC = () => {
@@ -13,9 +13,9 @@ const Home: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
-          </IonToolbar>
+          {/* <IonToolbar> */}
+            {/* <IonTitle size="large">Tab 1</IonTitle> */}
+          {/* </IonToolbar> */}
         </IonHeader>
         <MapboxMapHome />
       </IonContent>
