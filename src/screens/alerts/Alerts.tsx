@@ -1,7 +1,9 @@
 import React from 'react';
 
 const Alerts: React.FC = () => {
-  return <div>Alerts Screen</div>;
+  return <div>
+    <p>prueba</p>
+  </div>;
 };
 
 export default Alerts;
