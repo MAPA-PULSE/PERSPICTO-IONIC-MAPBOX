@@ -116,13 +116,12 @@ import '@ionic/react/css/palettes/dark.system.css';
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
+  IonTabs,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
-  IonTabs,
-  setupIonicReact
+  IonIcon,
+  IonLabel,
 } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
