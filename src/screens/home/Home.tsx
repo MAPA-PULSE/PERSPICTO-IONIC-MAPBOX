@@ -1,6 +1,6 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Home.css';
-import MapboxMapHome from '../../components/MapboxHome';
+import MapboxMapHome from '../../components/mapboxhome/MapboxHome';
 import React from 'react';
 
 const Home: React.FC = () => {
