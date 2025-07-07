@@ -3,7 +3,9 @@ import './Home.css';
 import MapboxMapHome from '../../components/mapboxhome/MapboxHome';
 import React from 'react';
 
+
 const Home: React.FC = () => {
+
   return (
     <IonPage>
       <IonHeader>
