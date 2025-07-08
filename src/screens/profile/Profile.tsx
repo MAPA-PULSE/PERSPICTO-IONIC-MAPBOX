@@ -4,6 +4,7 @@ import axios from "axios";
 import { User } from "../../index";
 import { auth } from "../../firebase";
 import ProfileViewEdit from "./ProfileViewEdit";
+import API_BASE_URL from "../../api";
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -26,7 +27,7 @@ const Profile: React.FC = () => {
 
       try {
         const token = await currentUser.getIdToken();
-        const response = await axios.get<User>("http://localhost:8000/users/me", {
+        const response = await axios.get<User>(`${API_BASE_URL}/users/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(response.data);
@@ -51,7 +52,7 @@ const Profile: React.FC = () => {
       const token = await currentUser.getIdToken();
 
       await axios.put(
-        "http://localhost:8000/users/me",
+        `${API_BASE_URL}/users/me`,
         { name: updatedUser.name, email: updatedUser.email },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -75,7 +76,7 @@ const Profile: React.FC = () => {
       if (!currentUser) throw new Error("Usuario no autenticado");
       const token = await currentUser.getIdToken();
 
-      await axios.delete("http://localhost:8000/users/me", {
+      await axios.delete(`${API_BASE_URL}/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
