@@ -5,6 +5,7 @@ import axios from "axios";
 import "./Login.css";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase"; // Ajusta la ruta según tu proyecto
+import API_BASE_URL from "../../api";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -26,7 +27,7 @@ const handleLogin = async () => {
     const firebase_uid = userCredential.user.uid;
 
     // 2. Enviar al backend para validar y obtener datos del usuario
-    const response = await axios.post("http://localhost:8000/users/login", {
+    const response = await axios.post(`${API_BASE_URL}/users/login`, {
       email,
       firebase_uid,
     });
