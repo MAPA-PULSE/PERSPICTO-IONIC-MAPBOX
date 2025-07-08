@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import "./Login.css";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
+import { auth } from "../../firebase"; // Ajusta la ruta según tu proyecto
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
