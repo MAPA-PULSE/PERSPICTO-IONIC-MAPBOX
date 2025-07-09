@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import { IonInput, IonButton, IonImg } from '@ionic/react';
-import axios from 'axios';
-import './css/SearchBar.css';
-import Search from '../../assets/Search.svg';
+// SearchBar.tsx
+/* [ SearchBar.tsx ]                  ← Componente contenedor (UI principal + lógica conectada)
+        ↓ usa hook [ useMapSearch ]  
+        
+ * Además, SearchBar.tsx compone los siguientes componentes UI:
+ * ↳ [ SearchInput.tsx ]              ← Input de búsqueda y botón (UI desacoplada)
+ * ↳ [ SearchResults.tsx ]            ← Lista interactiva de resultados
+ * ↳ [ ViewOptions.tsx ]              ← Botones para vista por continente
+ */
+import React from 'react';
+import { IonImg } from '@ionic/react';
+import SearchInput from './SearchInput';
+import SearchResults from './SearchResults';
 import ViewOptions from './ViewOptions';
+import useMapSearch from '../../hooks/useMapSearch';
+import Search from '../../assets/Search.svg';
+import './css/SearchBar.css';
+
+import type mapboxgl from 'mapbox-gl';
 
 interface SearchBarProps {
   searchEvent: (results: any[]) => void;
@@ -13,138 +25,33 @@ interface SearchBarProps {
   scrollToSearchBar?: () => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ searchEvent, map, setMarker, scrollToSearchBar }) => {
-  const [searchMessage, setSearchMessage] = useState<string>('');
-  const [search, setSearch] = useState<string>('');
-  const [searchResults, setSearchResults] = useState<mapboxgl.MapboxGeoJSONFeature[]>([]);
-
-  const handleSearch = (query: string) => {
-    if (map && query) {
-      fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?language=es&access_token=${mapboxgl.accessToken}`)
-        .then(response => response.json())
-        .then(data => {
-          const features: mapboxgl.MapboxGeoJSONFeature[] = data.features;
-          const filteredResults = features.filter(feature =>
-            feature.place_type.includes('country')
-          );
-
-          if (filteredResults.length === 1) {
-            handleResultClick(filteredResults[0]);
-          } else {
-            setSearchResults(filteredResults);
-          }
-        });
-    } else {
-      setSearchResults([]);
-    }
-  };
-
-  const handleResultClick = (result: mapboxgl.MapboxGeoJSONFeature) => {
-    const [lng, lat] = result.center as [number, number];
-
-    map?.flyTo({ center: [lng, lat] });
-
-    if (setMarker && map) {
-      setMarker(marker => {
-        if (marker) {
-          marker.remove();
-        }
-
-        const newMarker = new mapboxgl.Marker()
-          .setLngLat([lng, lat])
-          .addTo(map);
-
-        return newMarker;
-      });
-    }
-
-    setSearchResults([]);
-  };
-
-  const flyToContinent = (continent: string) => {
-    let center: [number, number];
-    let zoomLevel = 2;
-
-    switch (continent) {
-      case 'africa':
-        center = [8.6753, 9.0820];
-        break;
-      case 'america':
-        center = [-95.7129, 37.0902];
-        break;
-      case 'asia':
-        center = [100.6197, 34.0479];
-        break;
-      case 'europa':
-        center = [14.4378, 50.0755];
-        break;
-      case 'oceania':
-        center = [133.7751, -25.2744];
-        break;
-      default:
-        return;
-    }
-
-    map?.flyTo({ center, zoom: zoomLevel });
-  };
-
-  const handleButtonSearch = (value: string) => {
-    handleSearch(value);
-
-    axios.post(`http://localhost:8000/api/search?query=${value}`)
-      .then(res => {
-        if (res.data.message) {
-          setSearchMessage(res.data.message);
-          searchEvent([]);
-        } else {
-          setSearchMessage('');
-          searchEvent(res.data);
-        }
-        if (scrollToSearchBar) {
-          scrollToSearchBar();
-        }
-      })
-      .catch(err => {
-        console.log('error', err);
-      });
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleButtonSearch(search);
-    }
-  };
+const SearchBar: React.FC<SearchBarProps> = ({ map, setMarker, searchEvent, scrollToSearchBar }) => {
+  const {
+    search,
+    searchMessage,
+    searchResults,
+    handleSearchChange,
+    handleKeyDown,
+    handleButtonSearch,
+    handleResultClick,
+    flyToContinent,
+  } = useMapSearch({ map, setMarker, searchEvent, scrollToSearchBar });
 
   return (
     <>
-      <div className='container-search-map'>
-        <IonInput
-          className='search-map'
-          placeholder="Buscar por país o receta..."
+      <div className="container-search-map">
+        <SearchInput
           value={search}
-          onIonChange={e => setSearch(e.detail.value!)}
+          onChange={handleSearchChange}
+          onSearch={handleButtonSearch}
           onKeyDown={handleKeyDown}
-          clearInput
-          debounce={250}
+          icon={<IonImg src={Search} alt="Buscar" />}
         />
-        <IonButton className='btn-search' onClick={() => handleButtonSearch(search)}>
-          <IonImg src={Search} alt="Buscar" />
-        </IonButton>
       </div>
 
       <div>
         {searchMessage && <div className="message error-text fw-bold text-center">{searchMessage}</div>}
-        <ul className="country-list">
-          {searchResults.map((result, index) => (
-            <li
-              key={index}
-              onClick={() => handleResultClick(result)}
-              className="country-list-item"
-            >
-              {result.place_name}
-            </li>
-          ))}
-        </ul>
+        <SearchResults results={searchResults} onSelect={handleResultClick} />
       </div>
 
       <ViewOptions onViewOptionChange={flyToContinent} />
@@ -153,3 +60,36 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchEvent, map, setMarker, scro
 };
 
 export default SearchBar;
+
+// SearchInput.tsx
+import React from 'react';
+import { IonInput, IonButton } from '@ionic/react';
+
+interface SearchInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  onSearch: (query: string) => void;
+  onKeyDown: (e: React.KeyboardEvent) => void;
+  icon: React.ReactNode;
+}
+
+const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, onSearch, onKeyDown, icon }) => {
+  return (
+    <>
+      <IonInput
+        className="search-map"
+        placeholder="Buscar por país o receta..."
+        value={value}
+        onIonChange={e => onChange(e.detail.value!)}
+        onKeyDown={onKeyDown}
+        clearInput
+        debounce={250}
+      />
+      <IonButton className="btn-search" onClick={() => onSearch(value)}>
+        {icon}
+      </IonButton>
+    </>
+  );
+};
+
+export default SearchInput;
