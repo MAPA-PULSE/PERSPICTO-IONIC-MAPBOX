@@ -5,6 +5,8 @@ import { User } from "../../index";
 import { auth } from "../../firebase";
 import ProfileViewEdit from "./ProfileViewEdit";
 import API_BASE_URL from "../../api";
+import { signOut } from "firebase/auth";
+import { useHistory } from "react-router-dom";
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -14,6 +16,7 @@ const Profile: React.FC = () => {
   const [showToast, setShowToast] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -82,13 +85,22 @@ const Profile: React.FC = () => {
 
       setToastMessage("Usuario eliminado");
       setShowToast(true);
-      setUser(null);
-      // Aquí puedes agregar redirección o logout
+      await signOut(auth); // 👈 Cierra sesión después de eliminar
+      history.push("/login"); // 👈 Redirige
     } catch {
       setError("Error al eliminar usuario");
     } finally {
       setDeleting(false);
       setShowDeleteAlert(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); // 👈 Cierra sesión con Firebase
+      history.push("/login"); // 👈 Redirige a la pantalla de login
+    } catch (err) {
+      setError("Error al cerrar sesión");
     }
   };
 
@@ -126,6 +138,10 @@ const Profile: React.FC = () => {
     <IonPage>
       <IonContent fullscreen className="ion-padding">
         <ProfileViewEdit user={user} onSave={handleSave} />
+
+        <IonButton color="medium" expand="block" onClick={handleLogout}>
+          Cerrar sesión
+        </IonButton>
 
         <IonButton color="danger" expand="block" onClick={() => setShowDeleteAlert(true)} disabled={deleting}>
           {deleting ? "Eliminando..." : "Eliminar Cuenta"}

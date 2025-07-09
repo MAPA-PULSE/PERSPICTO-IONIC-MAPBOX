@@ -1,11 +1,9 @@
 import { IonPage, IonContent, IonInput, IonButton, IonLabel, IonItem, IonList, IonToast } from "@ionic/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
-import "./Login.css";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase"; // Ajusta la ruta según tu proyecto
-import API_BASE_URL from "../../api";
+import { handleLogin } from "./loginUtils";
+import "./Login.css";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -14,39 +12,25 @@ const Login: React.FC = () => {
   const [toastMessage, setToastMessage] = useState("");
   const history = useHistory();
 
-const handleLogin = async () => {
-  try {
-    if (!email || !password) {
-      setToastMessage("Por favor, completa todos los campos");
-      setShowToast(true);
-      return;
-    }
-
-    // 1. Login en Firebase Auth
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const firebase_uid = userCredential.user.uid;
-
-    // 2. Enviar al backend para validar y obtener datos del usuario
-    const response = await axios.post(`${API_BASE_URL}/users/login`, {
-      email,
-      firebase_uid,
+   useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        history.replace("/profile");
+      }
     });
 
-    console.log(response.data);
-    setToastMessage("Inicio de sesión correcto");
-    setShowToast(true);
+    return () => unsubscribe();
+  }, [history]);
 
-    setTimeout(() => {
-      history.push("/home");
-    }, 1500);
-
-  } catch (error: any) {
-    console.error(error);
-    const detail = error.response?.data?.detail ?? error.message ?? "Error desconocido";
-    setToastMessage("Error al iniciar sesión: " + detail);
+  const onLogin = async () => {
+    const { success, message } = await handleLogin(email, password);
+    setToastMessage(message);
     setShowToast(true);
-  }
-};
+    if (success) {
+      setTimeout(() => history.push("/home"), 1500);
+    }
+  };
+
   return (
     <IonPage>
       <IonContent className="ion-padding login-content">
@@ -63,7 +47,7 @@ const handleLogin = async () => {
           </IonItem>
         </IonList>
 
-        <IonButton expand="block" color="success" onClick={handleLogin}>
+        <IonButton expand="block" color="success" onClick={onLogin}>
           Iniciar sesión
         </IonButton>
 
