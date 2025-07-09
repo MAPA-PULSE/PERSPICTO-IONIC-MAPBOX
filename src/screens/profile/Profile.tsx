@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { IonPage, IonContent, IonLoading, IonText, IonToast, IonButton, IonAlert } from "@ionic/react";
-import axios from "axios";
 import { User } from "../../index";
 import { fetchUserProfile, updateUserProfile, deleteUserAccount, logoutUser } from "./profileUtils";
 import ProfileViewEdit from "./ProfileViewEdit";
@@ -80,7 +79,7 @@ const Profile: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen className="ion-padding">
+      <IonContent className="ion-padding">
         <ProfileViewEdit user={user} onSave={handleSave} />
 
         <IonButton color="medium" expand="block" onClick={handleLogout}>

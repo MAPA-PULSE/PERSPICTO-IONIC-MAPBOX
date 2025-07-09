@@ -31,7 +31,7 @@ const Login: React.FC = () => {
     }
   };
 
-  return (
+  return (  
     <IonPage>
       <IonContent className="ion-padding login-content">
         <h2 className="title">Perspicto</h2>
