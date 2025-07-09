@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { IonPage, IonContent, IonLoading, IonText, IonToast, IonButton, IonAlert } from "@ionic/react";
 import axios from "axios";
 import { User } from "../../index";
-import { auth } from "../../firebase";
+import { fetchUserProfile, updateUserProfile, deleteUserAccount, logoutUser } from "./profileUtils";
 import ProfileViewEdit from "./ProfileViewEdit";
-import API_BASE_URL from "../../api";
-import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 import { useHistory } from "react-router-dom";
 
 const Profile: React.FC = () => {
@@ -19,89 +18,34 @@ const Profile: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      const currentUser = auth.currentUser;
-
-      if (!currentUser) {
-        setError("Usuario no autenticado");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const token = await currentUser.getIdToken();
-        const response = await axios.get<User>(`${API_BASE_URL}/users/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUser(response.data);
-      } catch {
-        setError("Error al obtener perfil");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserProfile();
+    fetchUserProfile(setUser, setError, setLoading);
   }, []);
 
   const handleSave = async (updatedUser: User) => {
-    if (!user) return;
     setLoading(true);
     setError("");
 
-    try {
-      const currentUser = auth.currentUser;
-      if (!currentUser) throw new Error("Usuario no autenticado");
-      const token = await currentUser.getIdToken();
-
-      await axios.put(
-        `${API_BASE_URL}/users/me`,
-        { name: updatedUser.name, email: updatedUser.email },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      setUser(updatedUser);
-      setToastMessage("Perfil actualizado");
-      setShowToast(true);
-    } catch {
-      setError("Error al actualizar perfil");
-    } finally {
-      setLoading(false);
-    }
+    const success = await updateUserProfile(updatedUser, setUser, setToastMessage, setError);
+    setShowToast(success);
+    setLoading(false);
   };
 
   const handleDelete = async () => {
     setDeleting(true);
     setError("");
 
-    try {
-      const currentUser = auth.currentUser;
-      if (!currentUser) throw new Error("Usuario no autenticado");
-      const token = await currentUser.getIdToken();
-
-      await axios.delete(`${API_BASE_URL}/users/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setToastMessage("Usuario eliminado");
+    const success = await deleteUserAccount(setToastMessage, setError);
+    if (success) {
       setShowToast(true);
-      await signOut(auth); // 👈 Cierra sesión después de eliminar
-      history.push("/login"); // 👈 Redirige
-    } catch {
-      setError("Error al eliminar usuario");
-    } finally {
-      setDeleting(false);
-      setShowDeleteAlert(false);
+      await logoutUser(auth, history);
     }
+    setDeleting(false);
+    setShowDeleteAlert(false);
   };
-
   const handleLogout = async () => {
-    try {
-      await signOut(auth); // 👈 Cierra sesión con Firebase
-      history.push("/login"); // 👈 Redirige a la pantalla de login
-    } catch (err) {
-      setError("Error al cerrar sesión");
-    }
+    const success = await logoutUser(auth, history);
+    if (!success) setError("Error al cerrar sesión");
+    
   };
 
   if (loading) {
