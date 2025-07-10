@@ -8,6 +8,7 @@ const Home: React.FC = () => {
 
   return (
     <IonPage>
+      <IonContent  className="ion-padding">
       <IonHeader>
         <IonToolbar>
           <IonTitle>Home</IonTitle>
@@ -21,6 +22,7 @@ const Home: React.FC = () => {
         </IonHeader>
 
         <MapboxMapHome />
+      </IonContent>
       </IonContent>
     </IonPage>
   );

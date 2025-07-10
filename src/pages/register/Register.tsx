@@ -1,11 +1,7 @@
 import { IonPage, IonContent, IonInput, IonButton, IonLabel, IonItem, IonList, IonToast } from "@ionic/react";
 import { useState } from "react";
-import axios from "axios";
-import "./Register.css";
 import { useHistory } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase"; // Ajusta la ruta si es necesario
-import API_BASE_URL from "../../api";
+import { handleRegister } from "./registerUtils";
 
 const Register: React.FC = () => {
   const [name, setName] = useState("");
@@ -15,48 +11,24 @@ const Register: React.FC = () => {
   const [toastMessage, setToastMessage] = useState("");
   const history = useHistory();
 
-  
-const handleRegister = async () => {
-  try {
-    if (!name || !email || !password) {
-      setToastMessage("Por favor completa todos los campos");
-      setShowToast(true);
-      return;
-    }
-
-    // 1. Registro en Firebase Auth
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const firebase_uid = userCredential.user.uid;
-
-    // 2. Enviar datos al backend, enviando el UID correcto
-    const response = await axios.post(`${API_BASE_URL}/users/register`, {
-      name,
-      email,
-      firebase_uid,
-    });
-
-    console.log(response.data);
-    setToastMessage("Registro exitoso");
-    setShowToast(true);
-
-    setTimeout(() => {
-      history.push("/login");
-    }, 2000);
-
-  } catch (error: any) {
-    console.error(error);
-    const detail = error.response?.data?.detail ?? error.message ?? "Error desconocido";
-    setToastMessage("Error al registrar: " + detail);
-    setShowToast(true);
-  }
-};
-
  const clearFields = () => {
     setName("");
     setEmail("");
     setPassword("");
   };
   
+   const handleSubmit = async () => {
+    const { success, message } = await handleRegister({
+      name,
+      email,
+      password,
+      setShowToast,
+      setToastMessage,
+      history,
+    });
+
+    if (success) clearFields();
+  };
 
   return (
     <IonPage>
@@ -83,7 +55,7 @@ const handleRegister = async () => {
           Limpiar
         </IonButton>
 
-        <IonButton expand="block" color="success"  onClick={handleRegister}>
+        <IonButton expand="block" color="success"  onClick={handleSubmit}>
           Registrarse
         </IonButton>
 

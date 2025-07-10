@@ -12,7 +12,7 @@ import { IonImg } from '@ionic/react';
 import SearchInput from './SearchInput';
 import SearchResults from './SearchResults';
 import ViewOptions from './ViewOptions';
-import useMapSearch from '../../hooks/useMapSearch';
+import useMapSearch from '../hooks/useMapSearch';
 import Search from '../../assets/Search.svg';
 import './css/SearchBar.css';
 

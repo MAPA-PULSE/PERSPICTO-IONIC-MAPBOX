@@ -57,7 +57,9 @@
 import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css'; //  Importar estilos necesarios
-import './MapboxHome.css';
+import './MapboxHome.css'; 
+import { IonContent, IonPage } from '@ionic/react';
+
 
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicGVyc3BpY3RvdXNlciIsImEiOiJjbWMzZHhwZjMwNGcwMmlxeHcyeDZvcHV5In0._UopzIHKIkmOWhUEkUMV_A';
@@ -90,10 +92,12 @@ const MapboxMapHome: React.FC = () => {
   }, []);
 
    return (
-    <div className="map-root">
-      <div ref={mapContainer} className="map-container" />
-      <div className="title-overlay">Perspicto</div>
-    </div>
+   <IonPage>
+    <IonContent>
+        <div ref={mapContainer} className="map-container" />
+        <div className="title-overlay">Perspicto</div>
+    </IonContent>
+    </IonPage>
   );
 };
 
