@@ -15,7 +15,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, onSearch, on
     <>
       <IonInput
         className="search-map"
-        placeholder="Buscar por país o receta..."
+        placeholder="Escribe sobre un tema para generar una alerta en el mapa"
         value={value}
         onIonChange={e => onChange(e.detail.value!)}
         onKeyDown={onKeyDown}

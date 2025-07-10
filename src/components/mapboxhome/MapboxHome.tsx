@@ -95,7 +95,6 @@ const MapboxMapHome: React.FC = () => {
    <IonPage>
     <IonContent>
         <div ref={mapContainer} className="map-container" />
-        <div className="title-overlay">Perspicto</div>
     </IonContent>
     </IonPage>
   );
