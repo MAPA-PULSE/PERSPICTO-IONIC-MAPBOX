@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import type mapboxgl from 'mapbox-gl';
-import { searchCountries } from '../../../service/searchService';
+import { searchCountries } from '../service/searchService';
 
 interface Props {
   map: mapboxgl.Map | null;
