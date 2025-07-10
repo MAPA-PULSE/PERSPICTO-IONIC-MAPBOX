@@ -1,70 +1,122 @@
-import { IonPage, IonContent, IonInput, IonButton, IonLabel, IonItem, IonList, IonToast } from "@ionic/react";
-import { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { handleRegister } from "./registerUtils";
+import {
+  IonPage,
+  IonContent,
+  IonInput,
+  IonButton,
+  IonLabel,
+  IonItem,
+  IonList,
+  IonToast,
+  IonSpinner,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonGrid,
+  IonRow,
+  IonCol,
+} from "@ionic/react";
+import useRegister from "./useRegister";
+import "./Register.css";
 
 const Register: React.FC = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const history = useHistory();
-
- const clearFields = () => {
-    setName("");
-    setEmail("");
-    setPassword("");
-  };
-  
-   const handleSubmit = async () => {
-    const { success, message } = await handleRegister({
-      name,
-      email,
-      password,
-      setShowToast,
-      setToastMessage,
-      history,
-    });
-
-    if (success) clearFields();
-  };
+  const {
+    name,
+    setName,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    showToast,
+    setShowToast,
+    toastMessage,
+    loading,
+    onRegister,
+    clearFields,
+  } = useRegister();
 
   return (
     <IonPage>
-      <IonContent className="ion-padding register-content">
-        <h2 className="title">Perspicto</h2>
+      <IonHeader translucent>
+        <IonToolbar>
+          <IonTitle className="ion-text-center">Perspicto</IonTitle>
+        </IonToolbar>
+      </IonHeader>
 
-        <IonList>
-          <IonItem>
-            <IonLabel position="stacked">Nombre</IonLabel>
-            <IonInput value={name} onIonChange={(e) => setName(e.detail.value!)} />
-          </IonItem>
+      <IonContent fullscreen className="ion-padding register-content ion-text-center">
+        <IonGrid>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="12" sizeMd="6" sizeLg="4">
+              <h2 className="title">Crear cuenta</h2>
 
-          <IonItem>
-            <IonLabel position="stacked">Email</IonLabel>
-            <IonInput type="email" value={email} onIonChange={(e) => setEmail(e.detail.value!)} />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Contraseña</IonLabel>
-            <IonInput type="password" value={password} onIonChange={(e) => setPassword(e.detail.value!)} />
-          </IonItem>
-        </IonList>
+              <IonList>
+                <IonItem>
+                  <IonLabel position="floating">Nombre completo</IonLabel>
+                  <IonInput
+                    value={name}
+                    onIonChange={(e) => setName(e.detail.value!)}
+                    disabled={loading}
+                    autocomplete="name"
+                  />
+                </IonItem>
 
-        <IonButton expand="block" color="medium" onClick={clearFields}>
-          Limpiar
-        </IonButton>
+                <IonItem>
+                  <IonLabel position="floating">Correo electrónico</IonLabel>
+                  <IonInput
+                    type="email"
+                    value={email}
+                    onIonChange={(e) => setEmail(e.detail.value!)}
+                    disabled={loading}
+                    inputMode="email"
+                    autocomplete="email"
+                    spellCheck={false}
+                  />
+                </IonItem>
 
-        <IonButton expand="block" color="success"  onClick={handleSubmit}>
-          Registrarse
-        </IonButton>
+                <IonItem>
+                  <IonLabel position="floating">Contraseña</IonLabel>
+                  <IonInput
+                    type="password"
+                    value={password}
+                    onIonChange={(e) => setPassword(e.detail.value!)}
+                    disabled={loading}
+                    autocomplete="new-password"
+                  />
+                </IonItem>
+              </IonList>
 
-        <p>¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a></p>
+              <IonButton
+                expand="block"
+                color="medium"
+                onClick={clearFields}
+                disabled={loading}
+                className="ion-margin-top"
+              >
+                Limpiar
+              </IonButton>
+
+              <IonButton
+                expand="block"
+                color="success"
+                onClick={onRegister}
+                disabled={loading || !name || !email || !password}
+                className="ion-margin-top"
+              >
+                {loading ? <IonSpinner name="crescent" /> : "Registrarse"}
+              </IonButton>
+
+              <p className="login-link">
+                ¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a>
+              </p>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
 
         <IonToast
           isOpen={showToast}
           message={toastMessage}
           duration={3000}
+          position="bottom"
+          color="danger"
           onDidDismiss={() => setShowToast(false)}
         />
       </IonContent>

@@ -1,60 +1,95 @@
-import { IonPage, IonContent, IonInput, IonButton, IonLabel, IonItem, IonList, IonToast } from "@ionic/react";
-import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import { auth } from "../../firebase"; // Ajusta la ruta según tu proyecto
-import { handleLogin } from "./loginUtils";
+import {
+  IonPage,
+  IonContent,
+  IonInput,
+  IonButton,
+  IonLabel,
+  IonItem,
+  IonList,
+  IonToast,
+  IonSpinner,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonGrid,
+  IonRow,
+  IonCol,
+} from "@ionic/react";
+import useLogin from "./useLogin";
 import "./Login.css";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const history = useHistory();
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    showToast,
+    setShowToast,
+    toastMessage,
+    onLogin,
+    loading,
+  } = useLogin();
 
-   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        history.replace("/profile");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [history]);
-
-  const onLogin = async () => {
-    const { success, message } = await handleLogin(email, password);
-    setToastMessage(message);
-    setShowToast(true);
-    if (success) {
-      setTimeout(() => history.push("/home"), 1500);
-    }
-  };
-
-  return (  
+  return (
     <IonPage>
-      <IonContent className="ion-padding login-content">
-        <h2 className="title">Perspicto</h2>
+      <IonHeader translucent>
+        <IonToolbar>
+          <IonTitle className="ion-text-center">Perspicto</IonTitle>
+        </IonToolbar>
+      </IonHeader>
 
-        <IonList>
-          <IonItem>
-            <IonLabel position="stacked">Email</IonLabel>
-            <IonInput type="email" value={email} onIonChange={(e) => setEmail(e.detail.value!)} />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Contraseña</IonLabel>
-            <IonInput type="password" value={password} onIonChange={(e) => setPassword(e.detail.value!)} />
-          </IonItem>
-        </IonList>
+      <IonContent fullscreen className="ion-padding ion-text-center login-content">
+        <IonGrid>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="12" sizeMd="6" sizeLg="4">
+              <h2 className="title">Iniciar sesión</h2>
 
-        <IonButton expand="block" color="success" onClick={onLogin}>
-          Iniciar sesión
-        </IonButton>
+              <IonList>
+                <IonItem>
+                  <IonLabel position="floating">Correo electrónico</IonLabel>
+                  <IonInput
+                    type="email"
+                    value={email}
+                    onIonChange={(e) => setEmail(e.detail.value!)}
+                    disabled={loading}
+                    inputMode="email"
+                    autocomplete="email"
+                    spellCheck={false}
+                  />
+                </IonItem>
+
+                <IonItem>
+                  <IonLabel position="floating">Contraseña</IonLabel>
+                  <IonInput
+                    type="password"
+                    value={password}
+                    onIonChange={(e) => setPassword(e.detail.value!)}
+                    disabled={loading}
+                    autocomplete="current-password"
+                  />
+                </IonItem>
+              </IonList>
+
+              <IonButton
+                expand="block"
+                color="primary"
+                onClick={onLogin}
+                disabled={loading || !email || !password}
+                className="ion-margin-top"
+              >
+                {loading ? <IonSpinner name="crescent" /> : "Entrar"}
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
 
         <IonToast
           isOpen={showToast}
           message={toastMessage}
           duration={3000}
+          position="bottom"
+          color="danger"
           onDidDismiss={() => setShowToast(false)}
         />
       </IonContent>
@@ -63,4 +98,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-
