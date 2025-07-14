@@ -1,7 +1,7 @@
 import axios from "axios";
-import API_BASE_URL from "../../api";
-import { auth } from "../../firebase";
-import { User } from "../../index";
+import API_BASE_URL from "../api";
+import { auth } from "../firebase";
+import { User } from "../index";
 import { History } from "history";
 
 export const fetchUserProfile = async (
