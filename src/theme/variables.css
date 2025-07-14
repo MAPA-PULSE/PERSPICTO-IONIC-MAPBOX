@@ -2,3 +2,34 @@
 http://ionicframework.com/docs/theming/ */
 
 /* Revisar los colores de la app */
+
+/* === Tema CLARO === */
+:root {
+  /* Fondos */
+  --ion-background-color: #ffffff;
+  --card-background-color: #f2f2f2;
+
+  /* Texto */
+  --ion-text-color: #0e4b52;
+
+  /* Colores Ionic */
+  --ion-color-primary: #62d4ff;
+  --ion-color-secondary: #72d1d2;
+
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-secondary-contrast: #0e4b52;
+}
+
+/* === Tema OSCURO === */
+[data-theme='dark'] {
+  --ion-background-color: #011421;
+  --card-background-color: #0f3549;
+
+  --ion-text-color: #ffffff;
+
+  --ion-color-primary: #ff7f00;
+  --ion-color-secondary: #145c66;
+
+  --ion-color-primary-contrast: #011421;
+  --ion-color-secondary-contrast: #ffffff;
+}

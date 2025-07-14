@@ -1,7 +1,5 @@
 import React from 'react';
-import "./Settings.css"
 import { IonContent, IonPage } from '@ionic/react';
-import DarkMode from '../../components/darkmode/DarkMode';
 
 const Settings: React.FC = () => {
   
@@ -10,7 +8,6 @@ const Settings: React.FC = () => {
       <IonContent  className="ion-padding">
       <h1>Config</h1>
       </IonContent>
-      <DarkMode />
     </IonPage>
   )
 };
