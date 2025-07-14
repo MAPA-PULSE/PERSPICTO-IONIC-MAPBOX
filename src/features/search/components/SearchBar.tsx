@@ -11,7 +11,7 @@ import React from 'react';
 import { IonImg } from '@ionic/react';
 import SearchInput from './SearchInput';
 import SearchResults from './SearchResults';
-import ViewOptions from './ViewOptions';
+//import ViewOptions from './ViewOptions';
 import useMapSearch from '../hooks/useMapSearch';
 import Search from '../../assets/Search.svg';
 import './css/SearchBar.css';
@@ -53,7 +53,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ map, setMarker, searchEvent, scro
         <SearchResults results={searchResults} onSelect={handleResultClick} />
       </div>
 
-      <ViewOptions onViewOptionChange={flyToContinent} />
+      {/* <ViewOptions onViewOptionChange={flyToContinent} /> */}
     </>
   );
 };
