@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { handleRegister } from "./registerUtils";
+import { handleRegister } from "../utils/registerUtils";
 
 export default function useRegister() {
   const [name, setName] = useState("");
