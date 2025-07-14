@@ -72,7 +72,7 @@ const MapboxMapHome: React.FC = () => {
     // Solo crear el mapa si no está ya creado y existe el contenedor
     if (!mapContainer.current || mapInstance.current) return;
 
-    mapInstance.current = new mapboxgl.Map({
+    mapInstance.current = new mapboxgl.Map({  // No funciona la instancia bien de Mapbox GL JS
       container: mapContainer.current,
       style: 'mapbox://styles/perspictouser/cmc3eah7o00hm01qy1h5jgdvz', // URL mapbox diseñado
       center: [2.1734, 41.3851],// Coordenadas de la ciudad que quieras centrar al verse por 1a vez.
