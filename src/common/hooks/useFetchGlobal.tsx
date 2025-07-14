@@ -1,0 +1,1 @@
+/* Llamada GLOBAL del FETCH (fetch nativo) */

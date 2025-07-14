@@ -13,20 +13,20 @@ import Settings from "../screens/settings/Settings";
 const PrivateLayout: React.FC = () => (
   <IonTabs>
     <IonRouterOutlet>
-      <Route exact path="/home" component={Home} />
+      <Route exact path="/home" component={Home} /> 
       <Route exact path="/alerts" component={Alerts} />
       <Route exact path="/files" component={Files} />
       <Route exact path="/grafics" component={Grafics} />
       <Route exact path="/profile" component={Profile} />
       <Route exact path="/settings" component={Settings} />
-      <Redirect exact from="/private" to="/home" />
+      <Redirect exact from="/private" to="/home" /> 
     </IonRouterOutlet>
 
     <IonTabBar slot="bottom">
-      <IonTabButton tab="home" href="/home">
-        <IonIcon icon={home} />
+       <IonTabButton tab="home" href="/home"> 
+         <IonIcon icon={home} />
         <IonLabel>Home</IonLabel>
-      </IonTabButton>
+      </IonTabButton> 
       <IonTabButton tab="alerts" href="/alerts">
         <IonIcon icon={alert} />
         <IonLabel>Alerts</IonLabel>
