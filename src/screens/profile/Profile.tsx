@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { IonPage, IonContent, IonLoading, IonText, IonToast, IonButton, IonAlert } from "@ionic/react";
-import axios from "axios";
 import { User } from "../../index";
-import { auth } from "../../firebase";
+import { fetchUserProfile, updateUserProfile, deleteUserAccount, logoutUser } from "./profileUtils";
 import ProfileViewEdit from "./ProfileViewEdit";
+import { auth } from "../../firebase";
+import { useHistory } from "react-router-dom";
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -13,82 +14,37 @@ const Profile: React.FC = () => {
   const [showToast, setShowToast] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      const currentUser = auth.currentUser;
-
-      if (!currentUser) {
-        setError("Usuario no autenticado");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const token = await currentUser.getIdToken();
-        const response = await axios.get<User>("http://localhost:8000/users/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUser(response.data);
-      } catch {
-        setError("Error al obtener perfil");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserProfile();
+    fetchUserProfile(setUser, setError, setLoading);
   }, []);
 
   const handleSave = async (updatedUser: User) => {
-    if (!user) return;
     setLoading(true);
     setError("");
 
-    try {
-      const currentUser = auth.currentUser;
-      if (!currentUser) throw new Error("Usuario no autenticado");
-      const token = await currentUser.getIdToken();
-
-      await axios.put(
-        "http://localhost:8000/users/me",
-        { name: updatedUser.name, email: updatedUser.email },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      setUser(updatedUser);
-      setToastMessage("Perfil actualizado");
-      setShowToast(true);
-    } catch {
-      setError("Error al actualizar perfil");
-    } finally {
-      setLoading(false);
-    }
+    const success = await updateUserProfile(updatedUser, setUser, setToastMessage, setError);
+    setShowToast(success);
+    setLoading(false);
   };
 
   const handleDelete = async () => {
     setDeleting(true);
     setError("");
 
-    try {
-      const currentUser = auth.currentUser;
-      if (!currentUser) throw new Error("Usuario no autenticado");
-      const token = await currentUser.getIdToken();
-
-      await axios.delete("http://localhost:8000/users/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setToastMessage("Usuario eliminado");
+    const success = await deleteUserAccount(setToastMessage, setError);
+    if (success) {
       setShowToast(true);
-      setUser(null);
-      // Aquí puedes agregar redirección o logout
-    } catch {
-      setError("Error al eliminar usuario");
-    } finally {
-      setDeleting(false);
-      setShowDeleteAlert(false);
+      await logoutUser(auth, history);
     }
+    setDeleting(false);
+    setShowDeleteAlert(false);
+  };
+  const handleLogout = async () => {
+    const success = await logoutUser(auth, history);
+    if (!success) setError("Error al cerrar sesión");
+    
   };
 
   if (loading) {
@@ -123,8 +79,12 @@ const Profile: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen className="ion-padding">
+      <IonContent className="ion-padding">
         <ProfileViewEdit user={user} onSave={handleSave} />
+
+        <IonButton color="medium" expand="block" onClick={handleLogout}>
+          Cerrar sesión
+        </IonButton>
 
         <IonButton color="danger" expand="block" onClick={() => setShowDeleteAlert(true)} disabled={deleting}>
           {deleting ? "Eliminando..." : "Eliminar Cuenta"}

@@ -1,63 +1,9 @@
-// // src/components/MapboxMapHome.tsx
-// import React, { useEffect, useRef } from 'react';
-// import mapboxgl from 'mapbox-gl';
-
-// mapboxgl.accessToken = 'TU_MAPBOX_ACCESS_TOKEN';
-
-// const MapboxMapHome: React.FC = () => {
-//   const mapContainer = useRef<HTMLDivElement>(null);
-//   const mapInstance = useRef<mapboxgl.Map>();
-
-//   useEffect(() => {
-//     if (mapContainer.current && !mapInstance.current) {
-//       mapInstance.current = new mapboxgl.Map({
-//         container: mapContainer.current,
-//         style: 'mapbox://styles/mapbox/streets-v11',
-//         center: [-74.006, 40.7128], // Ejemplo: NYC
-//         zoom: 12,
-//         dragPan: true,          // Permite mover el mapa
-//         scrollZoom: false,      // Desactiva zoom con scroll
-//         doubleClickZoom: false, // Desactiva zoom con doble click
-//         touchZoomRotate: false, // Desactiva zoom y rotación con gestos táctiles
-//         boxZoom: false,         // Desactiva zoom con caja de selección
-//       });
-//     }
-
-//     return () => {
-//       if (mapInstance.current) {
-//         mapInstance.current.remove();
-//       }
-//     };
-//   }, []);
-
-//   return (
-//     <div
-//       ref={mapContainer}
-//       style={{
-//         position: 'absolute',
-//         top: 0,
-//         left: 0,
-//         right: 0,
-//         bottom: 0,
-//         height: '100%',
-//         width: '100%',
-//         zIndex: 0,
-//       }}
-//     />
-//   );
-// };
-
-// export default MapboxMapHome;
-
-
-
-
-// SEGUNDA OPCION 
-// MApboxMapHome.tsx
 import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css'; //  Importar estilos necesarios
-import './MapboxHome.css';
+import 'mapbox-gl/dist/mapbox-gl.css'; 
+import './MapboxHome.css'; 
+import { IonContent, IonPage } from '@ionic/react';
+
 
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicGVyc3BpY3RvdXNlciIsImEiOiJjbWMzZHhwZjMwNGcwMmlxeHcyeDZvcHV5In0._UopzIHKIkmOWhUEkUMV_A';
@@ -90,10 +36,13 @@ const MapboxMapHome: React.FC = () => {
   }, []);
 
    return (
-    <div className="map-root">
-      <div ref={mapContainer} className="map-container" />
-      <div className="title-overlay">Perspicto</div>
-    </div>
+   <IonPage>
+    <IonContent fullscreen>
+      <div className="map-root">
+        <div ref={mapContainer} className="map-container" />
+      </div>
+    </IonContent>
+    </IonPage>
   );
 };
 

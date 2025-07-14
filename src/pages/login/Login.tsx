@@ -1,75 +1,95 @@
-import { IonPage, IonContent, IonInput, IonButton, IonLabel, IonItem, IonList, IonToast } from "@ionic/react";
-import { useState } from "react";
-import { useHistory } from "react-router-dom";
-import axios from "axios";
+import {
+  IonPage,
+  IonContent,
+  IonInput,
+  IonButton,
+  IonLabel,
+  IonItem,
+  IonList,
+  IonToast,
+  IonSpinner,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonGrid,
+  IonRow,
+  IonCol,
+} from "@ionic/react";
+import useLogin from "./useLogin";
 import "./Login.css";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const history = useHistory();
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    showToast,
+    setShowToast,
+    toastMessage,
+    onLogin,
+    loading,
+  } = useLogin();
 
-const handleLogin = async () => {
-  try {
-    if (!email || !password) {
-      setToastMessage("Por favor, completa todos los campos");
-      setShowToast(true);
-      return;
-    }
-
-    // 1. Login en Firebase Auth
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const firebase_uid = userCredential.user.uid;
-
-    // 2. Enviar al backend para validar y obtener datos del usuario
-    const response = await axios.post("http://localhost:8000/users/login", {
-      email,
-      firebase_uid,
-    });
-
-    console.log(response.data);
-    setToastMessage("Inicio de sesión correcto");
-    setShowToast(true);
-
-    setTimeout(() => {
-      history.push("/home");
-    }, 1500);
-
-  } catch (error: any) {
-    console.error(error);
-    const detail = error.response?.data?.detail ?? error.message ?? "Error desconocido";
-    setToastMessage("Error al iniciar sesión: " + detail);
-    setShowToast(true);
-  }
-};
   return (
     <IonPage>
-      <IonContent className="ion-padding login-content">
-        <h2 className="title">Perspicto</h2>
+      <IonHeader translucent>
+        <IonToolbar>
+          <IonTitle className="ion-text-center">Perspicto</IonTitle>
+        </IonToolbar>
+      </IonHeader>
 
-        <IonList>
-          <IonItem>
-            <IonLabel position="stacked">Email</IonLabel>
-            <IonInput type="email" value={email} onIonChange={(e) => setEmail(e.detail.value!)} />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="stacked">Contraseña</IonLabel>
-            <IonInput type="password" value={password} onIonChange={(e) => setPassword(e.detail.value!)} />
-          </IonItem>
-        </IonList>
+      <IonContent fullscreen className="ion-padding ion-text-center login-content">
+        <IonGrid>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="12" sizeMd="6" sizeLg="4">
+              <h2 className="title">Iniciar sesión</h2>
 
-        <IonButton expand="block" color="success" onClick={handleLogin}>
-          Iniciar sesión
-        </IonButton>
+              <IonList>
+                <IonItem>
+                  <IonLabel position="floating">Correo electrónico</IonLabel>
+                  <IonInput
+                    type="email"
+                    value={email}
+                    onIonChange={(e) => setEmail(e.detail.value!)}
+                    disabled={loading}
+                    inputMode="email"
+                    autocomplete="email"
+                    spellCheck={false}
+                  />
+                </IonItem>
+
+                <IonItem>
+                  <IonLabel position="floating">Contraseña</IonLabel>
+                  <IonInput
+                    type="password"
+                    value={password}
+                    onIonChange={(e) => setPassword(e.detail.value!)}
+                    disabled={loading}
+                    autocomplete="current-password"
+                  />
+                </IonItem>
+              </IonList>
+
+              <IonButton
+                expand="block"
+                color="primary"
+                onClick={onLogin}
+                disabled={loading || !email || !password}
+                className="ion-margin-top"
+              >
+                {loading ? <IonSpinner name="crescent" /> : "Entrar"}
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
 
         <IonToast
           isOpen={showToast}
           message={toastMessage}
           duration={3000}
+          position="bottom"
+          color="danger"
           onDidDismiss={() => setShowToast(false)}
         />
       </IonContent>
@@ -78,4 +98,3 @@ const handleLogin = async () => {
 };
 
 export default Login;
-
