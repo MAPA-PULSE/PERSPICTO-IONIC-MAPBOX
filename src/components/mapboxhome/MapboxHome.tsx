@@ -40,10 +40,7 @@ const MapboxMapHome: React.FC = () => {
     <IonContent fullscreen>
       <div className="map-root">
         <div ref={mapContainer} className="map-container" />
-<<<<<<< HEAD
-=======
       </div>
->>>>>>> dev
     </IonContent>
     </IonPage>
   );

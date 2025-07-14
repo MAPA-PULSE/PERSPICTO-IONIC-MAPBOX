@@ -1,4 +1,4 @@
- /* Instancia de ESTADO GLOBAL para axios configurada (baseURL, interceptores)
+ /* ⚠️ Instancia de ESTADO GLOBAL para axios configurada PRUEBA (baseURL, interceptores)
 /features */
 // /common/apiClient.ts
 import axios from 'axios';

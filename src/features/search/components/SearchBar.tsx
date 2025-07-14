@@ -13,8 +13,11 @@ import SearchInput from './SearchInput';
 import SearchResults from './SearchResults';
 //import ViewOptions from './ViewOptions';
 import useMapSearch from '../hooks/useMapSearch';
-import Search from '../../assets/Search.svg';
-import './css/SearchBar.css';
+//import Search from '../../assets/Search.svg';
+import { IonSearchbar, IonIcon } from '@ionic/react';
+import { search } from 'ionicons/icons';
+
+import './SearchBar.css';
 import mapboxgl from 'mapbox-gl';
 
 interface SearchBarProps {
@@ -38,15 +41,15 @@ const SearchBar: React.FC<SearchBarProps> = ({ map, setMarker, searchEvent, scro
 
   return (
     <>
-      <div className="container-search-map">
-        <SearchInput
-          value={search}
-          onChange={handleSearchChange}
-          onSearch={handleButtonSearch}
-          onKeyDown={handleKeyDown}
-          icon={<IonImg src={Search} alt="Buscar" />}
-        />
-      </div>
+     <div className="container-search-map">
+  <SearchInput
+    value={search}
+    onChange={handleSearchChange}
+    onSearch={handleButtonSearch}
+    onKeyDown={handleKeyDown}
+    icon={<IonIcon icon={search} />}
+  />
+</div>
 
       <div>
         {searchMessage && <div className="message error-text fw-bold text-center">{searchMessage}</div>}

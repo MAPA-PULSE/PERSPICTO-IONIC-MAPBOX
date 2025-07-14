@@ -8,23 +8,6 @@ const Home: React.FC = () => {
 
   return (
     <IonPage>
-<<<<<<< HEAD
-      <IonContent  className="ion-padding">
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Home</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          {/* <IonToolbar> */}
-            {/* <IonTitle size="large">Tab 1</IonTitle> */}
-          {/* </IonToolbar> */}
-        </IonHeader>
-
-        <MapboxMapHome />
-      </IonContent>
-=======
     
       <IonContent className='main-container'>
 
@@ -48,7 +31,6 @@ const Home: React.FC = () => {
           al realizar la busqueda (item)*/}
           </IonContent>
 
->>>>>>> dev
       </IonContent>
     </IonPage>
   );
