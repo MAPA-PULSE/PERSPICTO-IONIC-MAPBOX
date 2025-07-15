@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IonPage, IonContent, IonLoading, IonText, IonToast, IonButton, IonAlert } from "@ionic/react";
 import { User } from "../../index";
-import { fetchUserProfile, updateUserProfile, deleteUserAccount, logoutUser } from "./profileUtils";
+import { fetchUserProfile, updateUserProfile, deleteUserAccount, logoutUser } from "../../common/utils/profileUtils";
 import ProfileViewEdit from "./ProfileViewEdit";
 import { auth } from "../../common/firebase/firebase";
 import { useHistory } from "react-router-dom";

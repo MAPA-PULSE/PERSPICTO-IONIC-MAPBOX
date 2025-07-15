@@ -15,7 +15,7 @@ import {
   IonRow,
   IonCol,
 } from "@ionic/react";
-import useRegister from "./useRegister";
+import useRegister from "../../common/hooks/useRegister";
 import "./Register.css";
 
 const Register: React.FC = () => {
