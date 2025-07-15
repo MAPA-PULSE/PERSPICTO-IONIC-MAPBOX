@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { auth } from "../../common/firebase/firebase"; // Ajusta según tu estructura
-import { handleLogin } from "./loginUtils"; // Ajusta la ruta según donde tengas handleLogin
+import { handleLogin } from "../utils/loginUtils"; // Ajusta la ruta según donde tengas handleLogin
 
 function useLogin() {
   const [email, setEmail] = useState("");

@@ -138,11 +138,14 @@ import '@ionic/react/css/core.css';
 
 
 import './theme/variables.css';
+import { ThemeProvider } from './common/context/ThemeContext';
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <AppRoutes />
+      <ThemeProvider>
+          <AppRoutes />
+      </ThemeProvider>
     </IonReactRouter>
   
   </IonApp>
