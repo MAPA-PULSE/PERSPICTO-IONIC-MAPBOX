@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-// import react, svelte and other needs...
+import path from "path";
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {
@@ -18,6 +18,12 @@ export default ({ mode }) => {
         },
       }
     }, 
+
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+      },
+    },
 
     build: {
       target: ["esnext"], // 👈 build.target
