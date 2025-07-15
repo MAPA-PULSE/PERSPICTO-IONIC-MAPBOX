@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
-import API_BASE_URL from "../../api";
+import { auth } from "../../common/firebase/firebase";
+import API_BASE_URL from "../../common/api/api";
 
 interface RegisterParams {
   name: string;

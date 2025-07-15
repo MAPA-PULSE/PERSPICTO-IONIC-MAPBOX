@@ -3,7 +3,7 @@ import { IonPage, IonContent, IonLoading, IonText, IonToast, IonButton, IonAlert
 import { User } from "../../index";
 import { fetchUserProfile, updateUserProfile, deleteUserAccount, logoutUser } from "./profileUtils";
 import ProfileViewEdit from "./ProfileViewEdit";
-import { auth } from "../../firebase";
+import { auth } from "../../common/firebase/firebase";
 import { useHistory } from "react-router-dom";
 
 const Profile: React.FC = () => {
@@ -44,7 +44,7 @@ const Profile: React.FC = () => {
   const handleLogout = async () => {
     const success = await logoutUser(auth, history);
     if (!success) setError("Error al cerrar sesión");
-    
+
   };
 
   if (loading) {

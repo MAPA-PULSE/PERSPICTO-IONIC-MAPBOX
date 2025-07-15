@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../common/firebase/firebase";
 
 interface PrivateRouteProps extends RouteProps {
   component: React.ComponentType<any>;

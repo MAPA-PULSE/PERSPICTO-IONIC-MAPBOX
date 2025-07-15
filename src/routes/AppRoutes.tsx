@@ -5,7 +5,7 @@ import Welcome from "../pages/welcome/Welcome";
 import Login from "../pages/login/Login";
 import Register from "../pages/register/Register";
 
-import PrivateRoute from "../components/PrivateRoute";
+import PrivateRoute from "../layout/PrivateRoute";
 import PrivateLayout from "../layout/PrivateLayout";
 
 const AppRoutes: React.FC = () => (

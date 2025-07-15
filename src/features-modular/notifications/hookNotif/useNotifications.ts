@@ -1,6 +1,6 @@
 // /features/notifications/useNotifications.ts
 import { useState, useEffect } from 'react';
-import apiClient from '../../../common/apiLocal/axiosGlobal';
+import apiClient from '../../../common/api/axiosGlobal';
 
 export function useNotifications() {
   const [notifications, setNotifications] = useState([]);
