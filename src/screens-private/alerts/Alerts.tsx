@@ -2,7 +2,7 @@
 import { IonContent, IonPage } from '@ionic/react';
 import React from 'react';
 import "./Alerts.css"
-import Search from '../../features/search/Search';
+import Search from '../../features-modular/search/Search';
 
 const Alerts: React.FC = () => {
 

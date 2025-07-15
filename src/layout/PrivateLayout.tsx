@@ -3,12 +3,12 @@ import { Redirect, Route , RouteProps} from "react-router-dom";
 
 import { home, alert, document, barChart, person, settings } from "ionicons/icons";
 
-import Home from "../screens/home/Home";
-import Alerts from "../screens/alerts/Alerts";
-import Files from "../screens/files/Files";
-import Grafics from "../screens/grafics/Grafics";
-import Profile from "../screens/profile/Profile";
-import Settings from "../screens/settings/Settings";
+import Home from "../screens-private/home/Home";
+import Alerts from "../screens-private/alerts/Alerts";
+import Files from "../screens-private/files/Files";
+import Grafics from "../screens-private/grafics/Grafics";
+import Profile from "../screens-private/profile/Profile";
+import Settings from "../screens-private/settings/Settings";
 
 const PrivateLayout: React.FC = () => (
   <IonTabs>

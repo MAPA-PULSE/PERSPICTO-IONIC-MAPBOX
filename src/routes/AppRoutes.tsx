@@ -1,9 +1,9 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 
-import Welcome from "../pages/welcome/Welcome";
-import Login from "../pages/login/Login";
-import Register from "../pages/register/Register";
+import Welcome from "../pages-public/welcome/Welcome";
+import Login from "../pages-public/login/Login";
+import Register from "../pages-public/register/Register";
 
 import PrivateRoute from "../layout/PrivateRoute";
 import PrivateLayout from "../layout/PrivateLayout";
