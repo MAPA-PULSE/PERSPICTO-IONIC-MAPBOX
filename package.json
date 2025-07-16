@@ -28,10 +28,12 @@
     "firebase": "^11.10.0",
     "ionicons": "^7.4.0",
     "mapbox-gl": "^3.13.0",
+    "powerbi-client": "^2.23.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-router": "^5.3.4",
-    "react-router-dom": "^5.3.4"
+    "react-router-dom": "^5.3.4",
+    "recharts": "^3.1.0"
   },
   "devDependencies": {
     "@capacitor/cli": "7.4.0",

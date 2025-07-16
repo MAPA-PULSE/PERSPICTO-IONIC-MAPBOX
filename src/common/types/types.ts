@@ -20,3 +20,9 @@ export interface CustomButtonProps {
   color?: string;
   disabled?: boolean;
 }
+
+export interface DataPoint {
+  name: string;         // fecha o etiqueta
+  busquedas: number;
+  alertas: number;
+}
