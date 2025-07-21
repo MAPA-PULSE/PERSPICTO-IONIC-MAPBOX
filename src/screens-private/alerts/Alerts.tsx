@@ -10,7 +10,6 @@ const Alerts: React.FC = () => {
   <IonPage>
     <IonContent className="ion-padding">
       {/* <h1>Pruebas</h1> */}
-       <Search />
     </IonContent>
   </IonPage>
   )
