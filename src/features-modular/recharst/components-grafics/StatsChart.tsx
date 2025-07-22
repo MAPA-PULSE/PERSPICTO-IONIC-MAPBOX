@@ -65,12 +65,14 @@ import {
   XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer
 } from "recharts";
 
-import { Stat } from "../../hooks/useStatistics";
+import { Stat } from "../hooks/useStatistics";
 
 interface Props {
   data: Stat[];
   type: "line" | "bar" | "area" | "radar";
 }
+
+
 
 export const StatsChart: React.FC<Props> = ({ data, type }) => {
   switch (type) {
