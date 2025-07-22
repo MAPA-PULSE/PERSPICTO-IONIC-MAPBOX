@@ -25,9 +25,8 @@ interface MapboxMapProps {
 // ✅ Configura el token de acceso (mejor fuera del componente)
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
-const MapboxMap: React.FC<MapboxMapProps> = ({ onMapLoad }) => {
+const MapboxMap: React.FC<MapboxMapProps> = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const { center, zoom, updateView } = useMapbox(MAPBOX_CENTER, MAPBOX_ZOOM);
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -35,31 +34,29 @@ const MapboxMap: React.FC<MapboxMapProps> = ({ onMapLoad }) => {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: MAPBOX_STYLE,
-      center,
-      zoom,
+      zoom: MAPBOX_ZOOM,
+      center: MAPBOX_CENTER,
     });
 
     map.on('load', () => {
-      onMapLoad(map);
       map.loadImage(markerIcon, (err, img) => {
         if (err || !img) {
           console.error('Error cargando ícono del marcador:', err);
           return;
         }
         map.addImage('custom-marker', img);
-        loadMarkers(map);
+        //loadMarkers(map);
+        
       });
     });
 
-    map.on('move', () => {
-      updateView(
-        [map.getCenter().lng, map.getCenter().lat],
-        map.getZoom()
-      );
-    });
+    new mapboxgl.Marker()
+    .setLngLat([30.5, 50.5])
+    .addTo(map);
+
 
     return () => map.remove();
-  }, [center, zoom, onMapLoad, updateView]);
+  }, []);
 
   return (
     <IonContent className="map-container">
