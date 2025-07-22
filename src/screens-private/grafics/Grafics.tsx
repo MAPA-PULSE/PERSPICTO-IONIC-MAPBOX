@@ -76,6 +76,7 @@ const Grafics: React.FC = () => {
     }
   };
 
+
   return (
     <IonPage>
       <IonHeader>

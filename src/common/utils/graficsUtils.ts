@@ -32,9 +32,7 @@ export const uploadPDFToMongo = async (pdfBlob: Blob) => {
   formData.append("file", pdfBlob, "reporte_estadisticas.pdf");
 
   try {
-    const response = await axios.post(`${API_BASE_URL}/mongo/upload-pdf/`, formData, {
-      headers: { "Content-Type": undefined },
-    });
+    const response = await axios.post(`${API_BASE_URL}/mongo/upload-pdf/`, formData);
     return response.data;
   } catch (error) {
     console.error("Error al subir PDF:", error);
