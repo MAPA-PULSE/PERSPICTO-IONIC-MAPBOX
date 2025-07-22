@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import {
-  IonPage, IonHeader, IonToolbar, IonTitle,
-  IonContent, IonButton, IonIcon, IonText, IonSpinner, IonToast
+  IonPage, IonHeader, IonToolbar, IonTitle, IonInput, IonItem, IonLabel,
+  IonContent, IonButton, IonIcon, IonText, IonSpinner,IonSelect, IonSelectOption, IonToast
 } from "@ionic/react";
 import { refresh, cloudUpload, save } from "ionicons/icons";
 
 import { useSearchStats } from "../../common/hooks/useStatistics";
 import { StatsChart } from "../../common/components/statschart/StatsChart";
 import {
-  generatePDFBlob,
+  generatePDFBlobFromSVG,
   uploadPDFToMongo,
   uploadReportToMongo,
   ReportData,
@@ -17,34 +17,37 @@ import {
 const Grafics: React.FC = () => {
   const { data, loading, error, refetch } = useSearchStats();
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [filename, setFilename] = useState("reporte_estadisticas");
+const [chartType, setChartType] = useState<"line" | "bar" | "area" | "radar">("line");
 
-  const handleGenerateAndUploadPDF = async () => {
-    try {
-      const pdfBlob = await generatePDFBlob("chart-container");
-      await uploadPDFToMongo(pdfBlob);
-      setToastMessage("PDF subido exitosamente a MongoDB");
-    } catch (error) {
-      console.error(error);
-      setToastMessage("Error al subir el PDF a MongoDB");
-    }
-  };
+ 
+const handleGenerateAndUploadPDF = async () => {
+  try {
+    const pdfBlob = await generatePDFBlobFromSVG();
+    await uploadPDFToMongo(pdfBlob);
+    setToastMessage("PDF subido exitosamente a MongoDB");
+  } catch (error) {
+    console.error(error);
+    setToastMessage("Error al subir el PDF a MongoDB");
+  }
+};
 
-  const handleSavePDF = async () => {
-    try {
-      const pdfBlob = await generatePDFBlob("chart-container");
-      const url = URL.createObjectURL(pdfBlob);
+const handleSavePDF = async () => {
+  try {
+    const pdfBlob = await generatePDFBlobFromSVG();
+    const url = URL.createObjectURL(pdfBlob);
 
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "reporte_estadisticas.pdf";
-      a.click();
-      URL.revokeObjectURL(url);
-      setToastMessage("PDF descargado correctamente");
-    } catch (error) {
-      console.error(error);
-      setToastMessage("Error al generar el PDF");
-    }
-  };
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "reporte_estadisticas.pdf";
+    a.click();
+    URL.revokeObjectURL(url);
+    setToastMessage("PDF descargado correctamente");
+  } catch (error) {
+    console.error(error);
+    setToastMessage("Error al generar el PDF");
+  }
+};
 
   const handleDownloadJSON = () => {
     const json = JSON.stringify(data, null, 2);
@@ -93,7 +96,18 @@ const Grafics: React.FC = () => {
         )}
         {!loading && !error &&  (
           <>
+        
+
             <div className="ion-margin-bottom ion-padding-start flex gap-2 ion-justify-content-start ion-wrap">
+              
+              <IonText className="ion-margin-top">Nombre del archivo PDF:</IonText>
+            <IonInput
+              value={filename}
+              placeholder="Nombre del archivo"
+              onIonChange={(e) => setFilename(e.detail.value!)}
+              className="ion-margin-bottom"
+            />
+
               <IonButton onClick={refetch} color="primary">
                 <IonIcon icon={refresh} slot="start" />
                 Actualizar
@@ -119,9 +133,22 @@ const Grafics: React.FC = () => {
                 Subir PDF a MongoDB
               </IonButton>
             </div>
-
+<IonItem>
+  <IonLabel>Tipo de gráfico</IonLabel>
+  <IonSelect
+    value={chartType}
+    placeholder="Selecciona tipo"
+    onIonChange={(e) => setChartType(e.detail.value)}
+  >
+    <IonSelectOption value="line">Líneas</IonSelectOption>
+    <IonSelectOption value="bar">Barras</IonSelectOption>
+    <IonSelectOption value="area">Área</IonSelectOption>
+    <IonSelectOption value="radar">Radar</IonSelectOption>
+  </IonSelect>
+</IonItem>
             <div id="chart-container">
-              <StatsChart data={data} />
+              <StatsChart data={data} type={chartType} />
+
             </div>
           </>
         )}
