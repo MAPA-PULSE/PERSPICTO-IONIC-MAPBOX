@@ -1,6 +1,7 @@
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import axios from "axios";
+import API_BASE_URL from "../api/api";
 
 export interface ReportData {
   title: string;
@@ -30,14 +31,19 @@ export const uploadPDFToMongo = async (pdfBlob: Blob) => {
   const formData = new FormData();
   formData.append("file", pdfBlob, "reporte_estadisticas.pdf");
 
-  const response = await axios.post("/upload-pdf/", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-
-  return response.data;
+  try {
+    const response = await axios.post(`${API_BASE_URL}/mongo/upload-pdf/`, formData, {
+      headers: { "Content-Type": undefined },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error al subir PDF:", error);
+    throw error;
+  }
 };
 
+
 export const uploadReportToMongo = async (report: ReportData) => {
-  const response = await axios.post("/statistics_reports", report);
+  const response = await axios.post(`${API_BASE_URL}/mongo/statistics_reports`, report);
   return response.data;
 };
