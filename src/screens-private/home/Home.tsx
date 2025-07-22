@@ -14,18 +14,14 @@ const Home: React.FC = () => {
   const handleSearchResult = (results: any[]) => {};
 
   return (
-    <IonPage>
-      <IonContent fullscreen>
-        <div className="home-container">
-          <SearchBar
-            map={mapInstance}
-            setMarker={setMarker}
-            searchEvent={handleSearchResult}
-          />
-          <MapboxMap onMapLoad={handleMapLoad} />
-        </div>
-      </IonContent>
-    </IonPage>
+  <IonPage>
+  <IonContent fullscreen>
+    <div className="home-container" style={{ height: '100%' }}>
+      <MapboxMap onMapLoad={handleMapLoad} />
+    </div>
+  </IonContent>
+</IonPage>
+
   );
 };
 

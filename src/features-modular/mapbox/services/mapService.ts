@@ -19,8 +19,8 @@ export function loadMarkers(map: mapboxgl.Map) {
     source: 'lugares',
     filter: ['has', 'point_count'],
     paint: {
-      'circle-color': '#51bbd6',
-      'circle-radius': 18,
+      'circle-color': '#f162ceff',
+      'circle-radius': 10,
     },
   });
 

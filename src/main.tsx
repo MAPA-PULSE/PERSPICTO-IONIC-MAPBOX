@@ -2,6 +2,8 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import './theme/globals.css';
+
 
 // Call the element loader before the render call
 defineCustomElements(window);
