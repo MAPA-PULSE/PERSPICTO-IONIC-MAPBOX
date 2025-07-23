@@ -31,7 +31,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import API_BASE_URL from "../api/api";
+import API_BASE_URL from "../../../common/api/api";
 
 export interface Stat {
   date: string;
