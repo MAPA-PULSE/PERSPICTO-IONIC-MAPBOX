@@ -1,89 +1,204 @@
-// src/features-modular/mapbox/components/MapboxMap.tsx
-//Componente principal que inicializa el mapa
-// src/features-modular/mapbox/components/MapboxMap.tsx
-import React, { useRef, useEffect } from 'react';
-import { IonContent } from '@ionic/react';
+import React, { useRef, useEffect, useState } from 'react';
+import { IonContent, IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
 import mapboxgl from 'mapbox-gl';
-import useMapbox from '../hooks/useMapbox';
-import { loadMarkers } from '../services/mapService';
 import { MAPBOX_STYLE, MAPBOX_CENTER, MAPBOX_ZOOM } from '../MapboxConfig';
 import markerIcon from '../styles/marker-icon.png';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../../../theme/globals.css';
-
 import { SearchBox } from "@mapbox/search-js-react";
 
-// 🔐  el token de acceso de Mapbox
+
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
-
-
-//v No se ha definido el token de acceso de Mapbox. Asegúrate de tener VITE_MAPBOX_TOKEN en tu archivo .env
 if (!mapboxgl.accessToken) {
-  console.error(" No tienes acceso a Mapbox");
+  console.error("❌ No tienes acceso a Mapbox");
 }
 
-interface MapboxMapProps {
-  onMapLoad: (map: mapboxgl.Map) => void;
-}
-
-// ✅ Configura el token de acceso (mejor fuera del componente)
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-
-const MapboxMap: React.FC<MapboxMapProps> = () => {
+const MapboxMap: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
+  const mapInstanceRef = useRef<mapboxgl.Map | null>(null);
+  const allMarkersRef = useRef<mapboxgl.Marker[]>([]);
+  const [locations, setLocations] = useState<any[]>([]);
+  const [selectedType, setSelectedType] = useState<string>('all');
+  const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
+  const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+
+  // Diferentes dispositivos
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLandscape(window.innerWidth > window.innerHeight);
+
+      if (window.innerWidth < 768) {
+        setDeviceType('mobile');
+      } else if (window.innerWidth < 1024) {
+        setDeviceType('tablet');
+      } else {
+        setDeviceType('desktop');
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (!mapContainer.current) return;
 
     mapInstanceRef.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: MAPBOX_STYLE,
-      zoom: MAPBOX_ZOOM,
-      center: MAPBOX_CENTER,
+      style: MAPBOX_STYLE || 'mapbox://styles/perspictouser/cmc3eah7o00hm01qy1h5jgdvz',
+      center: MAPBOX_CENTER || [2.1734, 41.3851],
+      zoom: MAPBOX_ZOOM || 1,
+      dragPan: true,
+      scrollZoom: true,
+      doubleClickZoom: true,
+      touchZoomRotate: true,
+      boxZoom: true,
+      projection: 'globe',
     });
 
     mapInstanceRef.current.on('load', () => {
-      mapInstanceRef.current.loadImage(markerIcon, (err: any, img: any) => {
+      mapInstanceRef.current!.loadImage(markerIcon, (err, img) => {
         if (err || !img) {
-          console.error('Error cargando ícono del marcador:', err);
+          console.error('❌ Error cargando ícono del marcador:', err);
           return;
         }
-        mapInstanceRef.current.addImage('custom-marker', img);
-        //loadMarkers(map);
-
+        mapInstanceRef.current!.addImage('custom-marker', img);
       });
     });
 
-    new mapboxgl.Marker()
-      .setLngLat([0 ,0 ])
-      .addTo(mapInstanceRef.current);
-
-
-    return () => mapInstanceRef.current.remove();
+    return () => mapInstanceRef.current?.remove();
   }, []);
 
   function setInputValue(d: any) {
-    console.log(d);
+    const features = d?.features;
+    if (!features || features.length === 0) return;
+
+    const newLocations = features.slice(0, 20).map((f: any, index: number) => ({
+      id: index.toString(),
+      name: f.place_name,
+      coordinates: f.geometry.coordinates,
+      type: f.properties?.feature_type || f.place_type?.[0] || 'unknown',
+    }));
+
+    setLocations(newLocations);
+    renderMarkersFromData(newLocations);
+    setSelectedType('all');
   }
 
-  return (
-    <IonContent className="map-container" fullscreen>
-      
-      <SearchBox
-        accessToken={mapboxgl.accessToken!}
-        map={mapInstanceRef.current}
-        mapboxgl={mapboxgl}
-        value={"Haz tu búsqueda . . ."}
-        onChange={(d) => {
-          setInputValue(d);
-        }}
-        marker
-      />
-      <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
-    </IonContent>
+  const renderMarkersFromData = (data: any[]) => {
+    clearMarkers();
+    data.forEach(loc => {
+      const marker = new mapboxgl.Marker()
+        .setLngLat(loc.coordinates)
+        .setPopup(new mapboxgl.Popup().setText(loc.name))
+        .addTo(mapInstanceRef.current!);
+      allMarkersRef.current.push(marker);
+    });
+  };
 
+  const renderMarkersByType = (type: string) => {
+    setSelectedType(type);
+    const filtered = type === 'all' ? locations : locations.filter(loc => loc.type === type);
+    renderMarkersFromData(filtered);
+  };
+  // Limpiado de los 20 markers
+  const clearMarkers = () => {
+    allMarkersRef.current.forEach(marker => marker.remove());
+    allMarkersRef.current = [];
+  };
+
+  return (
+    <IonContent fullscreen style={{ position: 'relative' }}>
+
+      <div
+        style={{
+          position: 'absolute',
+          top: deviceType === 'mobile' ? (isLandscape ? '1vh' : '2vh') : '2vh',
+          left: '4vw',
+          right: '4vw',
+          zIndex: 20,
+        }}
+      >
+        <SearchBox
+          accessToken={mapboxgl.accessToken!}
+          mapboxgl={mapboxgl}
+          map={mapInstanceRef.current!}
+          value="Busca una ubicación..."
+          onChange={(d) => setInputValue(d)}
+          marker={false}
+        />
+      </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          top: deviceType === 'mobile' ? (isLandscape ? '7vh' : '10vh') : '10vh',
+          left: '4vw',
+          right: '4vw',
+          zIndex: 10,
+          background: 'transparent',
+          borderRadius: '0.5rem',
+          padding: '0.5rem',
+          overflowX: 'auto',
+          display: 'flex',
+          gap: '0.5rem',
+          flexDirection: 'row',
+        }}
+      >
+        <IonSegment
+          value={selectedType}
+          onIonChange={(e) => renderMarkersByType(e.detail.value)}
+          style={{
+            width: '100%',
+            background: 'transparent',
+            fontSize: deviceType === 'mobile' ? '0.75rem' : '1rem',
+            display: 'flex',           // aseguramos que sea flex container
+            flexDirection: 'row',     // horizontal
+            
+            //overflowX: 'auto',
+            //display: 'flex',
+            //gap: '0.5rem',
+          }}
+        >
+          <IonSegmentButton value="all">
+            <IonLabel>Todos</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="country">
+            <IonLabel>País</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="region">
+            <IonLabel>Región</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="place">
+            <IonLabel>Ciudad</IonLabel>
+          </IonSegmentButton>
+          {deviceType !== 'mobile' && (
+            <>
+              <IonSegmentButton value="locality">
+                <IonLabel>Localidad</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="neighborhood">
+                <IonLabel>Vecindario</IonLabel>
+              </IonSegmentButton>
+            </>
+          )}
+        </IonSegment>
+      </div>
+
+      <div
+        ref={mapContainer}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          zIndex: 0,
+        }}
+      />
+    </IonContent>
   );
 };
 

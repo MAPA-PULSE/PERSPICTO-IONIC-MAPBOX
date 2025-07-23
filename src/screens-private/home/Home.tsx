@@ -16,7 +16,7 @@ const Home: React.FC = () => {
   return (
   <IonPage>
   <IonContent fullscreen>
-    <div className="home-container" style={{ height: '100%' }}>
+    <div className="home-container" style={{ height: '100vh',width:'100vw' }}>
       <MapboxMap onMapLoad={handleMapLoad} />
     </div>
   </IonContent>
