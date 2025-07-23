@@ -16,7 +16,7 @@ import {
 
 
 
-const Grafics: React.FC = () => {
+const GraficsDashboard: React.FC = () => {
   const { data, loading, error, refetch } = useSearchStats();
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [filename, setFilename] = useState("reporte_estadisticas");
@@ -154,4 +154,4 @@ const Grafics: React.FC = () => {
   );
 };
 
-export default Grafics;
+export default GraficsDashboard;
