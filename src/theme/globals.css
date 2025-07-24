@@ -1,1 +1,39 @@
 /* global.css */
+
+/* Estilo base para botones del segmento */
+.segment-button-custom {
+  background-color: none;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.25);
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 4rem;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
+}
+
+.labelbtn{
+    background-color: transparent;
+}
+
+/* Hover (solo visible en escritorio) */
+@media (hover: hover) {
+  .segment-button-custom:hover {
+    background-color: #e0f7ff;
+  }
+}
+
+/* Activo seleccionado */
+.segment-button-custom.segment-button-checked {
+  background-color: #a3dfff;
+  color: #00324e;
+}
+
+/* Efecto de toque */
+.segment-button-custom:active {
+  transform: scale(0.97);
+}
+
+Ionlabel {
+    color: greenyellow;
+}

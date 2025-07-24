@@ -1,12 +1,16 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { IonContent, IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
 import mapboxgl from 'mapbox-gl';
+import debounce from 'lodash.debounce';
+import { SearchBox } from '@mapbox/search-js-react';
 import { MAPBOX_STYLE, MAPBOX_CENTER, MAPBOX_ZOOM } from '../MapboxConfig';
 import markerIcon from '../styles/marker-icon.png';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../../../theme/globals.css';
-import { SearchBox } from "@mapbox/search-js-react";
-
+import { useDeviceType } from '../hooks/useDeviceType';
+import { useHistory } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase'; // tu archivo de config de firebase
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -16,86 +20,63 @@ if (!mapboxgl.accessToken) {
 
 const MapboxMap: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<mapboxgl.Map | null>(null);
-  const allMarkersRef = useRef<mapboxgl.Marker[]>([]);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const [markers, setMarkers] = useState<mapboxgl.Marker[]>([]);
   const [locations, setLocations] = useState<any[]>([]);
-  const [selectedType, setSelectedType] = useState<string>('all');
-  const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
-  const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [selectedType, setSelectedType] = useState('all');
+  const { deviceType, isLandscape } = useDeviceType();
+  const history = useHistory();
 
-  // Diferentes dispositivos
+  // Auth: redirección si no está logueada
   useEffect(() => {
-    const handleResize = () => {
-      setIsLandscape(window.innerWidth > window.innerHeight);
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (!user) history.push('/');
+    });
+    return unsub;
+  }, [history]);
 
-      if (window.innerWidth < 768) {
-        setDeviceType('mobile');
-      } else if (window.innerWidth < 1024) {
-        setDeviceType('tablet');
-      } else {
-        setDeviceType('desktop');
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
+  // Inicializar mapa
   useEffect(() => {
     if (!mapContainer.current) return;
 
-    mapInstanceRef.current = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: MAPBOX_STYLE || 'mapbox://styles/perspictouser/cmc3eah7o00hm01qy1h5jgdvz',
-      center: MAPBOX_CENTER || [2.1734, 41.3851],
-      zoom: MAPBOX_ZOOM || 1,
-      dragPan: true,
-      scrollZoom: true,
-      doubleClickZoom: true,
-      touchZoomRotate: true,
-      boxZoom: true,
+      style: MAPBOX_STYLE,
+      center: MAPBOX_CENTER,
+      zoom: MAPBOX_ZOOM,
       projection: 'globe',
     });
 
-    mapInstanceRef.current.on('load', () => {
-      mapInstanceRef.current!.loadImage(markerIcon, (err, img) => {
+    map.on('load', () => {
+      map.loadImage(markerIcon, (err, img) => {
         if (err || !img) {
           console.error('❌ Error cargando ícono del marcador:', err);
           return;
         }
-        mapInstanceRef.current!.addImage('custom-marker', img);
+        map.addImage('custom-marker', img);
       });
     });
 
-    return () => mapInstanceRef.current?.remove();
+    mapRef.current = map;
+
+    return () => map.remove();
   }, []);
 
-  function setInputValue(d: any) {
-    const features = d?.features;
-    if (!features || features.length === 0) return;
-
-    const newLocations = features.slice(0, 20).map((f: any, index: number) => ({
-      id: index.toString(),
-      name: f.place_name,
-      coordinates: f.geometry.coordinates,
-      type: f.properties?.feature_type || f.place_type?.[0] || 'unknown',
-    }));
-
-    setLocations(newLocations);
-    renderMarkersFromData(newLocations);
-    setSelectedType('all');
-  }
+  const clearMarkers = () => {
+    markers.forEach(marker => marker.remove());
+    setMarkers([]);
+  };
 
   const renderMarkersFromData = (data: any[]) => {
     clearMarkers();
-    data.forEach(loc => {
+    const newMarkers = data.map(loc => {
       const marker = new mapboxgl.Marker()
         .setLngLat(loc.coordinates)
         .setPopup(new mapboxgl.Popup().setText(loc.name))
-        .addTo(mapInstanceRef.current!);
-      allMarkersRef.current.push(marker);
+        .addTo(mapRef.current!);
+      return marker;
     });
+    setMarkers(newMarkers);
   };
 
   const renderMarkersByType = (type: string) => {
@@ -103,100 +84,80 @@ const MapboxMap: React.FC = () => {
     const filtered = type === 'all' ? locations : locations.filter(loc => loc.type === type);
     renderMarkersFromData(filtered);
   };
-  // Limpiado de los 20 markers
-  const clearMarkers = () => {
-    allMarkersRef.current.forEach(marker => marker.remove());
-    allMarkersRef.current = [];
-  };
+
+  const debouncedSearch = useCallback(
+    debounce((d: any) => {
+      const features = d?.features;
+      if (!features || features.length === 0) return;
+
+      const newLocations = features.slice(0, 20).map((f: any, index: number) => ({
+        id: index.toString(),
+        name: f.place_name,
+        coordinates: f.geometry.coordinates,
+        type: f.properties?.feature_type || f.place_type?.[0] || 'unknown',
+      }));
+
+      setLocations(newLocations);
+      renderMarkersFromData(newLocations);
+      setSelectedType('all');
+    }, 500),
+    []
+  );
 
   return (
     <IonContent fullscreen style={{ position: 'relative' }}>
-
-      <div
-        style={{
-          position: 'absolute',
-          top: deviceType === 'mobile' ? (isLandscape ? '1vh' : '2vh') : '2vh',
-          left: '4vw',
-          right: '4vw',
-          zIndex: 20,
-        }}
-      >
+      {/* SearchBox */}
+      <div style={{
+        position: 'absolute',
+        top: deviceType === 'mobile' ? (isLandscape ? '1vh' : '2vh') : '2vh',
+        left: '4vw',
+        right: '4vw',
+        zIndex: 20,
+      }}>
         <SearchBox
           accessToken={mapboxgl.accessToken!}
           mapboxgl={mapboxgl}
-          map={mapInstanceRef.current!}
+          map={mapRef.current!}
           value="Busca una ubicación..."
-          onChange={(d) => setInputValue(d)}
+          onChange={debouncedSearch}
           marker={false}
         />
       </div>
 
-      <div
-        style={{
-          position: 'absolute',
-          top: deviceType === 'mobile' ? (isLandscape ? '7vh' : '10vh') : '10vh',
-          left: '4vw',
-          right: '4vw',
-          zIndex: 10,
-          background: 'transparent',
-          borderRadius: '0.5rem',
-          padding: '0.5rem',
-          overflowX: 'auto',
-          display: 'flex',
-          gap: '0.5rem',
-          flexDirection: 'row',
-        }}
-      >
+      {/* Segment Buttons */}
+      <div style={{
+        position: 'absolute',
+        top: deviceType === 'mobile' ? (isLandscape ? '7vh' : '10vh') : '10vh',
+        left: '4vw',
+        right: '4vw',
+        zIndex: 10,
+        background: 'transparent',
+        display: 'flex',
+        gap: '0.5rem',
+        flexDirection: 'row',
+        overflowX: 'auto',
+      }}>
         <IonSegment
           value={selectedType}
-          onIonChange={(e) => renderMarkersByType(e.detail.value)}
-          style={{
-            width: '100%',
-            background: 'transparent',
-            fontSize: deviceType === 'mobile' ? '0.75rem' : '1rem',
-            display: 'flex',           // aseguramos que sea flex container
-            flexDirection: 'row',     // horizontal
-            
-            //overflowX: 'auto',
-            //display: 'flex',
-            //gap: '0.5rem',
-          }}
+          onIonChange={(e) => renderMarkersByType(e.detail.value!)}
         >
-          <IonSegmentButton value="all">
-            <IonLabel>Todos</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="country">
-            <IonLabel>País</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="region">
-            <IonLabel>Región</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="place">
-            <IonLabel>Ciudad</IonLabel>
-          </IonSegmentButton>
+          <IonSegmentButton value="all"><IonLabel>Todos</IonLabel></IonSegmentButton>
+          <IonSegmentButton value="country"><IonLabel>País</IonLabel></IonSegmentButton>
+          <IonSegmentButton value="region"><IonLabel>Región</IonLabel></IonSegmentButton>
+          <IonSegmentButton value="place"><IonLabel>Ciudad</IonLabel></IonSegmentButton>
           {deviceType !== 'mobile' && (
             <>
-              <IonSegmentButton value="locality">
-                <IonLabel>Localidad</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="neighborhood">
-                <IonLabel>Vecindario</IonLabel>
-              </IonSegmentButton>
+              <IonSegmentButton value="locality"><IonLabel>Localidad</IonLabel></IonSegmentButton>
+              <IonSegmentButton value="neighborhood"><IonLabel>Vecindario</IonLabel></IonSegmentButton>
             </>
           )}
         </IonSegment>
       </div>
 
+      {/* Map Container */}
       <div
         ref={mapContainer}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          zIndex: 0,
-        }}
+        style={{ position: 'absolute', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 0 }}
       />
     </IonContent>
   );
