@@ -1,190 +1,165 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { IonContent, IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
+import React, { useRef, useEffect } from 'react';
+import { IonContent } from '@ionic/react';
 import mapboxgl from 'mapbox-gl';
 import { MAPBOX_STYLE, MAPBOX_CENTER, MAPBOX_ZOOM } from '../MapboxConfig';
-import markerIcon from '../styles/marker-icon.png';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../../../theme/globals.css';
-import { SearchBox } from "@mapbox/search-js-react";
-
+import { SearchBox } from '@mapbox/search-js-react';
+import { fetchEarthquakes } from '../services/quakeService';
+import { fetchWeatherData } from '../services/weatherService';
+import { fetchAirQuality } from '../services/airService';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-
-if (!mapboxgl.accessToken) {
-  console.error("❌ No tienes acceso a Mapbox");
-}
 
 const MapboxMap: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<mapboxgl.Map | null>(null);
-  const allMarkersRef = useRef<mapboxgl.Marker[]>([]);
-  const [locations, setLocations] = useState<any[]>([]);
-  const [selectedType, setSelectedType] = useState<string>('all');
-  const [isLandscape, setIsLandscape] = useState(window.innerWidth > window.innerHeight);
-  const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
-
-  // Diferentes dispositivos
-  useEffect(() => {
-    const handleResize = () => {
-      setIsLandscape(window.innerWidth > window.innerHeight);
-
-      if (window.innerWidth < 768) {
-        setDeviceType('mobile');
-      } else if (window.innerWidth < 1024) {
-        setDeviceType('tablet');
-      } else {
-        setDeviceType('desktop');
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   useEffect(() => {
     if (!mapContainer.current) return;
 
-    mapInstanceRef.current = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: MAPBOX_STYLE || 'mapbox://styles/perspictouser/cmc3eah7o00hm01qy1h5jgdvz',
-      center: MAPBOX_CENTER || [2.1734, 41.3851],
-      zoom: MAPBOX_ZOOM || 1,
-      dragPan: true,
-      scrollZoom: true,
-      doubleClickZoom: true,
-      touchZoomRotate: true,
-      boxZoom: true,
+      style: MAPBOX_STYLE || 'mapbox://styles/perspictouser/cmdh6c1pa002301s8cv4ohs3a/draft',
+      center: MAPBOX_CENTER || [0, 20],
+      zoom: MAPBOX_ZOOM || 3.5,
       projection: 'globe',
     });
 
-    mapInstanceRef.current.on('load', () => {
-      mapInstanceRef.current!.loadImage(markerIcon, (err, img) => {
-        if (err || !img) {
-          console.error('❌ Error cargando ícono del marcador:', err);
-          return;
-        }
-        mapInstanceRef.current!.addImage('custom-marker', img);
+    mapInstanceRef.current = map;
+
+    map.on('load', async () => {
+      map.scrollZoom.enable();
+
+      // === Capa de viento ===
+      map.addSource('wind', {
+        type: 'raster',
+        tiles: [
+          `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${import.meta.env.VITE_OPENWEATHER_KEY}`
+        ],
+        tileSize: 256,
+        attribution: 'Map data © OpenWeatherMap',
       });
+
+      map.addLayer({
+        id: 'wind-layer',
+        type: 'raster',
+        source: 'wind',
+        paint: { 'raster-opacity': 0.7 },
+      });
+
+      // === Capa de nubes animada ===
+      map.addSource('clouds', {
+        type: 'raster',
+        tiles: [
+          `https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${import.meta.env.VITE_OPENWEATHER_KEY}`
+        ],
+        tileSize: 256,
+        attribution: 'Map data © OpenWeatherMap',
+      });
+
+      map.addLayer({
+        id: 'clouds-layer',
+        type: 'raster',
+        source: 'clouds',
+        paint: { 'raster-opacity': 0.6 },
+      });
+
+      let opacity = 0.6;
+      let increasing = true;
+      const interval = setInterval(() => {
+        if (map.getLayer('clouds-layer')) {
+          map.setPaintProperty('clouds-layer', 'raster-opacity', opacity);
+          opacity += increasing ? 0.005 : -0.005;
+          if (opacity >= 0.8) increasing = false;
+          if (opacity <= 0.4) increasing = true;
+        }
+      }, 100);
+
+      // === Capa de sismos ===
+      const earthquakeData = await fetchEarthquakes();
+      map.addSource('earthquakes', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: earthquakeData.map(eq => ({
+            type: 'Feature',
+            properties: {
+              mag: eq.magnitude,
+              title: eq.title,
+              time: eq.time,
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: eq.coordinates,
+            }
+          }))
+        }
+      });
+
+      map.addLayer({
+        id: 'earthquake-heat',
+        type: 'heatmap',
+        source: 'earthquakes',
+        maxzoom: 9,
+        paint: {
+          'heatmap-weight': ['interpolate', ['linear'], ['get', 'mag'], 0, 0, 6, 1],
+          'heatmap-intensity': 1.2,
+          'heatmap-color': [
+            'interpolate', ['linear'], ['heatmap-density'],
+            0, 'rgba(33,102,172,0)',
+            0.2, 'rgb(103,169,207)',
+            0.4, 'rgb(209,229,240)',
+            0.6, 'rgb(253,219,199)',
+            0.8, 'rgb(239,138,98)',
+            1, 'rgb(178,24,43)'
+          ],
+          'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 2, 9, 20],
+          'heatmap-opacity': 0.7,
+        }
+      });
+
+      // === Evento clic para clima y calidad del aire ===
+      map.on('click', async (e) => {
+        const { lng, lat } = e.lngLat;
+        const [weather, air] = await Promise.all([
+          fetchWeatherData(lat, lng),
+          fetchAirQuality(lat, lng)
+        ]);
+
+        const w = weather?.[0];
+        const aqi = air?.list?.[0]?.main?.aqi;
+
+        const html = `
+          <strong>Ubicación:</strong> ${lat.toFixed(2)}, ${lng.toFixed(2)}<br/>
+          <strong>Clima:</strong> ${w?.description || 'N/A'} (${w?.temperature} °C)<br/>
+          <strong>Aire (AQI):</strong> ${aqi || 'N/A'}
+        `;
+
+        new mapboxgl.Popup()
+          .setLngLat([lng, lat])
+          .setHTML(html)
+          .addTo(map);
+      });
+
+      // Limpieza
+      return () => clearInterval(interval);
     });
 
-    return () => mapInstanceRef.current?.remove();
+    return () => map.remove();
   }, []);
 
-  function setInputValue(d: any) {
-    const features = d?.features;
-    if (!features || features.length === 0) return;
-
-    const newLocations = features.slice(0, 20).map((f: any, index: number) => ({
-      id: index.toString(),
-      name: f.place_name,
-      coordinates: f.geometry.coordinates,
-      type: f.properties?.feature_type || f.place_type?.[0] || 'unknown',
-    }));
-
-    setLocations(newLocations);
-    renderMarkersFromData(newLocations);
-    setSelectedType('all');
-  }
-
-  const renderMarkersFromData = (data: any[]) => {
-    clearMarkers();
-    data.forEach(loc => {
-      const marker = new mapboxgl.Marker()
-        .setLngLat(loc.coordinates)
-        .setPopup(new mapboxgl.Popup().setText(loc.name))
-        .addTo(mapInstanceRef.current!);
-      allMarkersRef.current.push(marker);
-    });
-  };
-
-  const renderMarkersByType = (type: string) => {
-    setSelectedType(type);
-    const filtered = type === 'all' ? locations : locations.filter(loc => loc.type === type);
-    renderMarkersFromData(filtered);
-  };
-  // Limpiado de los 20 markers
-  const clearMarkers = () => {
-    allMarkersRef.current.forEach(marker => marker.remove());
-    allMarkersRef.current = [];
-  };
-
   return (
-    <IonContent fullscreen style={{ position: 'relative' }}>
-
-      <div
-        style={{
-          position: 'absolute',
-          top: deviceType === 'mobile' ? (isLandscape ? '1vh' : '2vh') : '2vh',
-          left: '4vw',
-          right: '4vw',
-          zIndex: 20,
-        }}
-      >
+    <IonContent fullscreen>
+      <div style={{ position: 'absolute', top: '2vh', left: '4vw', right: '4vw', zIndex: 20 }}>
         <SearchBox
           accessToken={mapboxgl.accessToken!}
           mapboxgl={mapboxgl}
           map={mapInstanceRef.current!}
-          value="Busca una ubicación..."
-          onChange={(d) => setInputValue(d)}
+          value="Buscar lugar"
+          onChange={() => {}}
           marker={false}
         />
-      </div>
-
-      <div
-        style={{
-          position: 'absolute',
-          top: deviceType === 'mobile' ? (isLandscape ? '7vh' : '10vh') : '10vh',
-          left: '4vw',
-          right: '4vw',
-          zIndex: 10,
-          background: 'transparent',
-          borderRadius: '0.5rem',
-          padding: '0.5rem',
-          overflowX: 'auto',
-          display: 'flex',
-          gap: '0.5rem',
-          flexDirection: 'row',
-        }}
-      >
-        <IonSegment
-          value={selectedType}
-          onIonChange={(e) => renderMarkersByType(e.detail.value)}
-          style={{
-            width: '100%',
-            background: 'transparent',
-            fontSize: deviceType === 'mobile' ? '0.75rem' : '1rem',
-            display: 'flex',           // aseguramos que sea flex container
-            flexDirection: 'row',     // horizontal
-            
-            //overflowX: 'auto',
-            //display: 'flex',
-            //gap: '0.5rem',
-          }}
-        >
-          <IonSegmentButton value="all">
-            <IonLabel>Todos</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="country">
-            <IonLabel>País</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="region">
-            <IonLabel>Región</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="place">
-            <IonLabel>Ciudad</IonLabel>
-          </IonSegmentButton>
-          {deviceType !== 'mobile' && (
-            <>
-              <IonSegmentButton value="locality">
-                <IonLabel>Localidad</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="neighborhood">
-                <IonLabel>Vecindario</IonLabel>
-              </IonSegmentButton>
-            </>
-          )}
-        </IonSegment>
       </div>
 
       <div
@@ -195,7 +170,6 @@ const MapboxMap: React.FC = () => {
           left: 0,
           width: '100vw',
           height: '100vh',
-          zIndex: 0,
         }}
       />
     </IonContent>
