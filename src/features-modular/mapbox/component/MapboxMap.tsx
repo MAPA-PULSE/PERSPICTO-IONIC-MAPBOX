@@ -74,6 +74,7 @@ const MapboxMap: React.FC = () => {
         paint: { 'raster-opacity': 0.6 },
       });
 
+      // ✅ ANIMACIÓN OPACIDAD CAPA DE NUBES CON LIMPIEZA SEGURA
       let opacity = 0.6;
       let increasing = true;
       const interval = setInterval(() => {
@@ -151,16 +152,29 @@ const MapboxMap: React.FC = () => {
           .addTo(map);
       });
 
-      // Limpieza
-      return () => clearInterval(interval);
+      // ✅ LIMPIEZA DE INTERVAL Y EVENTOS EN UNLOAD
+      return () => {
+        clearInterval(interval);
+        map.off('click', () => {}); // 🔁 recomendado si quieres evitar duplicados
+      };
     });
 
-    return () => map.remove();
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null; // ✅ ayuda a evitar memoria retenida
+      }
+    };
   }, [deviceType]); // ✅ Mantener deviceType en dependencias si quieres re-crear el mapa en resize
 
   return (
     <IonContent fullscreen>
-      <div style={{ position: 'absolute', top: '2vh', left: '4vw', right: '4vw', zIndex: 20 }}>
+      {/* ✅ MEJORA ACCESIBILIDAD: CONTENEDOR DEL MAPA CON ROLE Y ARIA */}
+      <div
+        style={{ position: 'absolute', top: '2vh', left: '4vw', right: '4vw', zIndex: 20 }}
+        aria-label="Buscador de lugares"
+        role="search"
+      >
         <SearchBox
           accessToken={mapboxgl.accessToken!}
           mapboxgl={mapboxgl}
@@ -173,6 +187,8 @@ const MapboxMap: React.FC = () => {
 
       <div
         ref={mapContainer}
+        role="application" // Accesibilidad
+        aria-label="Mapa interactivo con capas climáticas, de viento y sismos" // // Accesibilidad descriptiva
         style={{
           position: 'absolute',
           top: 0,

@@ -1,5 +1,4 @@
-/* global.css */
-<<<<<<< HEAD
+/* PERSPICTO-IONIC-MAPBOX\src\theme\globals.css */
 
 /* Estilo base para botones del segmento */
 .segment-button-custom {
@@ -38,7 +37,6 @@
 Ionlabel {
     color: greenyellow;
 }
-=======
 .marker-animated {
   animation: fadeInZoom 0.5s ease-out;
 }
@@ -53,4 +51,3 @@ Ionlabel {
     opacity: 1;
   }
 }
->>>>>>> origin/feature/save-alerts-mapbox
