@@ -1,5 +1,4 @@
-// src/features-modular/mapbox/hooks/useMapbox.ts
-//Hook para manejar estado central y zoom, y exponer referencias
+// src/hooks/useMapbox.ts
 import { useState, useCallback } from 'react';
 import type { LngLatLike } from 'mapbox-gl';
 

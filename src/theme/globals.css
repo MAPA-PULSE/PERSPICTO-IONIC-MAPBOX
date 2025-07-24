@@ -1,4 +1,5 @@
 /* global.css */
+<<<<<<< HEAD
 
 /* Estilo base para botones del segmento */
 .segment-button-custom {
@@ -37,3 +38,19 @@
 Ionlabel {
     color: greenyellow;
 }
+=======
+.marker-animated {
+  animation: fadeInZoom 0.5s ease-out;
+}
+
+@keyframes fadeInZoom {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+>>>>>>> origin/feature/save-alerts-mapbox
