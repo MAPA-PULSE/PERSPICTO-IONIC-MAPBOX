@@ -51,3 +51,10 @@ Ionlabel {
     opacity: 1;
   }
 }
+
+
+/* En tu archivo globals.css o un nuevo archivo */
+.custom-modal ion-modal {
+  z-index: 9999 !important;
+  position: relative !important;
+}

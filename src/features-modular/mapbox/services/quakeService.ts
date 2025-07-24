@@ -11,6 +11,9 @@ export async function getEarthquakes() {
     coordinates: f.geometry.coordinates,
     magnitude: f.properties.mag,
     time: f.properties.time,
+    depth: f.geometry.coordinates[2],
+    tsunami: f.properties.tsunami,
+    url: f.properties.url,
   }));
 }
 
