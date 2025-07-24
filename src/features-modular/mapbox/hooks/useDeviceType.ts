@@ -1,3 +1,4 @@
+//PERSPICTO-IONIC-MAPBOX\src\features-modular\mapbox\hooks\useDeviceType.ts
 import { useEffect, useState } from 'react';
 
 export const useDeviceType = () => {

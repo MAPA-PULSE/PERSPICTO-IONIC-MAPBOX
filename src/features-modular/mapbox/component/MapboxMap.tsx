@@ -9,14 +9,15 @@ import { SearchBox } from '@mapbox/search-js-react';
 import { fetchEarthquakes } from '../services/quakeService';
 import { fetchWeatherData } from '../services/weatherService';
 import { fetchAirQuality } from '../services/airService';
-import { useDeviceType } from '../hooks/useDeviceType'; // responsive 
-
+import { useDeviceType } from '../hooks/useDeviceType'; // responsive
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const MapboxMap: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<mapboxgl.Map | null>(null);
+
+  const { isLandscape, deviceType } = useDeviceType(); // ✅ CORREGIDO: hook funcionando correctamente
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -25,14 +26,13 @@ const MapboxMap: React.FC = () => {
       container: mapContainer.current,
       style: MAPBOX_STYLE || 'mapbox://styles/perspictouser/cmdh6c1pa002301s8cv4ohs3a/draft',
       center: MAPBOX_CENTER || [0, 20],
-      zoom: MAPBOX_ZOOM || 3.5,
+      zoom: deviceType === 'mobile' ? 2.5 : MAPBOX_ZOOM || 3.5, // ✅ ZOOM RESPONSIVO SEGÚN EL TIPO DE DISPOSITIVO
       projection: 'globe',
       dragPan: true,
       scrollZoom: true,
       doubleClickZoom: true,
       touchZoomRotate: true,
       boxZoom: true,
-
     });
 
     mapInstanceRef.current = map;
@@ -156,7 +156,7 @@ const MapboxMap: React.FC = () => {
     });
 
     return () => map.remove();
-  }, []);
+  }, [deviceType]); // ✅ Mantener deviceType en dependencias si quieres re-crear el mapa en resize
 
   return (
     <IonContent fullscreen>
