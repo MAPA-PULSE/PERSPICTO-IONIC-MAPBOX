@@ -18,6 +18,11 @@ export async function fetchWeatherData(lat: number, lon: number) {
       coordinates: [weatherData.coord.lon, weatherData.coord.lat],
       description: weatherData.weather[0].description,
       temperature: weatherData.main.temp,
+      temp_min: weatherData.main.temp_min, 
+      temp_max: weatherData.main.temp_max,
+      humidity: weatherData.main.humidity,
+      wind_speed: weatherData.wind.speed,
+      icon: weatherData.weather[0].icon,
     }];
   } catch (error) {
     console.error('Error fetching weather data:', error);
