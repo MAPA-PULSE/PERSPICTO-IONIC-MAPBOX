@@ -1,38 +1,27 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+// src/screens-private/home/Home.tsx
+import React, { useState } from 'react';
+import { IonPage, IonContent } from '@ionic/react';
+import MapboxMap from '../../features-modular/mapbox/component/MapboxMap';
+import SearchBar from '../../features-modular/search/components/SearchBar';
+import type mapboxgl from 'mapbox-gl';
 import './Home.css';
-import MapboxMapHome from '../../common/components/mapboxhome/MapboxHome';
-import React from 'react';
-
 
 const Home: React.FC = () => {
+  const [mapInstance, setMapInstance] = useState<mapboxgl.Map | null>(null);
+  const [marker, setMarker] = useState<mapboxgl.Marker | null>(null);
+
+  const handleMapLoad = (map: mapboxgl.Map) => setMapInstance(map);
+  const handleSearchResult = (results: any[]) => {};
 
   return (
-    <IonPage>
-    
-      <IonContent className='main-container'>
+  <IonPage>
+  <IonContent fullscreen>
+    <div className="home-container" style={{ height: '100vh',width:'100vw' }}>
+      <MapboxMap onMapLoad={handleMapLoad} />
+    </div>
+  </IonContent>
+</IonPage>
 
-          <IonHeader className='header-container'>
-              <IonToolbar>
-                  <IonTitle>Perpicto</IonTitle>
-              </IonToolbar>
-          </IonHeader>
-
-
-          {/* Aqui agregas <IonContent></IonContent> como si fuesen div para buscador y filtros  */}
-
-
-          <IonContent className='mapbox-container'>
-            <MapboxMapHome />
-          </IonContent>
-
-
-          <IonContent className='result-search-container'>
-          {/* Aqui condicionas el <IonContent></IonContent> para que te genere div para la lista de palabras encontradas
-          al realizar la busqueda (item)*/}
-          </IonContent>
-
-      </IonContent>
-    </IonPage>
   );
 };
 
