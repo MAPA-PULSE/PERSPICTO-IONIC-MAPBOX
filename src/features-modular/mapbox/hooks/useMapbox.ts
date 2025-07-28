@@ -1,4 +1,3 @@
-// src/hooks/useMapbox.ts
 import { useState, useCallback } from 'react';
 import type { LngLatLike } from 'mapbox-gl';
 

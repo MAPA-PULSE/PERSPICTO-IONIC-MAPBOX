@@ -73,7 +73,7 @@ const Login: React.FC = () => {
 
               <IonButton
                 expand="block"
-                color="primary"
+                color="success"
                 onClick={onLogin}
                 disabled={loading || !email || !password}
                 className="ion-margin-top"

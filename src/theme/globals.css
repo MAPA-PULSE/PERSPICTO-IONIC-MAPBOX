@@ -16,45 +16,51 @@
     background-color: transparent;
 }
 
-/* Hover (solo visible en escritorio) */
-@media (hover: hover) {
-  .segment-button-custom:hover {
-    background-color: #e0f7ff;
-  }
-}
-
-/* Activo seleccionado */
-.segment-button-custom.segment-button-checked {
-  background-color: #a3dfff;
-  color: #00324e;
-}
-
 /* Efecto de toque */
 .segment-button-custom:active {
   transform: scale(0.97);
 }
 
-Ionlabel {
-    color: greenyellow;
-}
+
 .marker-animated {
   animation: fadeInZoom 0.5s ease-out;
 }
-
-@keyframes fadeInZoom {
-  0% {
-    transform: scale(0.3);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
 
 /* En tu archivo globals.css o un nuevo archivo */
 .custom-modal ion-modal {
   z-index: 9999 !important;
   position: relative !important;
 }
+
+
+.filters-container {
+  position: absolute;
+  top: 8vh;
+  left: 4vw;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  max-width: 280px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+@media (min-width: 768px) {
+  .filters-container {
+    top: 10vh;
+    left: 2vw;
+    max-width: 220px;
+    padding: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: none;
+  }
+}
+
+
+
+/* Estilo letra global */
+
+/* */

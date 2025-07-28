@@ -1,3 +1,4 @@
+// PERSPICTO-IONIC-MAPBOX\src\screens-private\profile\Profile.tsx
 import React, { useEffect, useState } from "react";
 import { IonPage, IonContent, IonLoading, IonText, IonToast, IonButton, IonAlert } from "@ionic/react";
 import { User } from "../../index";
@@ -5,6 +6,7 @@ import { fetchUserProfile, updateUserProfile, deleteUserAccount, logoutUser } fr
 import ProfileViewEdit from "./ProfileViewEdit";
 import { auth } from "../../common/firebase/firebase";
 import { useHistory } from "react-router-dom";
+import "./Profile.css"
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -71,7 +73,7 @@ const Profile: React.FC = () => {
     return (
       <IonPage>
         <IonContent fullscreen className="ion-padding">
-          <IonText>No hay datos de usuario disponibles.</IonText>
+          <IonText color="danger">No hay datos de usuario disponibles.</IonText>
         </IonContent>
       </IonPage>
     );
