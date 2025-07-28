@@ -18,7 +18,7 @@ export const useFCM = (userId: number) => {
           alert(`${data.title}: ${data.body}`);
         });
       } catch (err) {
-        console.error("❌ Error al inicializar FCM:", err);
+        console.error("Error al inicializar FCM:", err);
       }
     };
 
