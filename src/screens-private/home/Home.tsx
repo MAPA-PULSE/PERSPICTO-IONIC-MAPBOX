@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { IonPage, IonContent } from '@ionic/react';
 import MapboxMap from '../../features-modular/mapbox/component/MapboxMap';
-import SearchBar from '../../features-modular/search/components/SearchBar';
-import type mapboxgl from 'mapbox-gl';
+//import SearchBar from '../../features-modular/search/components/SearchBar';
+//import type mapboxgl from 'mapbox-gl';
 import './Home.css';
 
 const Home: React.FC = () => {

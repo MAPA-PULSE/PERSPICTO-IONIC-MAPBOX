@@ -7,10 +7,15 @@ const ModalInfo: React.FC<{
   content: string | null;
 }> = ({ isOpen, onClose, content }) => (
   <IonModal isOpen={isOpen} onDidDismiss={onClose} className="custom-modal">
-    <div style={{ padding: '1rem' }}>
+    <div style={{ padding: '1rem', color:'danger' }}>
       <h2>Detalles</h2>
       <div dangerouslySetInnerHTML={{ __html: content || '' }} />
-      <IonButton expand="full" onClick={onClose}>
+      <IonButton 
+      expand="full" 
+      onClick={onClose}
+      color="danger"
+      aria-label="icono de cerrar modal de información"
+      >
         Cerrar
       </IonButton>
     </div>
