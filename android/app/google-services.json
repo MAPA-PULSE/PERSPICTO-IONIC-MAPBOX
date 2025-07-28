@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "878987297613",
+    "project_id": "perspicto-ea5e9",
+    "storage_bucket": "perspicto-ea5e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878987297613:android:f4421f14b81370bece2d04",
+        "android_client_info": {
+          "package_name": "com.perspicto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUBQYqtToLC_NdZowwc6VU72gt7JX3F6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878987297613:android:9cbccec0df2031fcce2d04",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUBQYqtToLC_NdZowwc6VU72gt7JX3F6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

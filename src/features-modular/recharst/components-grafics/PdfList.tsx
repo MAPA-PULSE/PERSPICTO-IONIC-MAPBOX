@@ -37,7 +37,7 @@ const PdfList: React.FC = () => {
       a.click();
       a.remove();
     } catch (err) {
-      console.error("❌ Error al descargar el PDF:", err);
+      console.error("Error al descargar el PDF:", err);
       setError("Error al descargar el PDF");
     }
   };

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { auth } from "../../common/firebase/firebase"; // Ajusta según tu estructura
-import { handleLogin } from "../utils/loginUtils"; // Ajusta la ruta según donde tengas handleLogin
+import { auth } from "../../common/firebase/firebase"; 
+import { handleLogin } from "../utils/loginUtils"; 
 
 function useLogin() {
   const [email, setEmail] = useState("");
@@ -21,7 +21,7 @@ function useLogin() {
   }, [history]);
 
   const onLogin = async () => {
-    if (loading) return; // evitar doble submit
+    if (loading) return; 
 
     setLoading(true);
     const { success, message } = await handleLogin(email, password);
