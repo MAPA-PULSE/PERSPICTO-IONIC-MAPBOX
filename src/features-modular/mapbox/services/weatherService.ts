@@ -14,6 +14,7 @@ export async function fetchWeatherData(lat: number, lon: number): Promise<Weathe
   try {
     const weather = await getWeather(lat, lon);
    return [{
+
   coordinates: [weather.coord.lon, weather.coord.lat],
   description: weather.weather[0].description,
   temperature: weather.main.temp,
@@ -27,6 +28,7 @@ export async function fetchWeatherData(lat: number, lon: number): Promise<Weathe
   visibility: weather.visibility,
   clouds: weather.clouds.all,
   icon: weather.weather[0].icon,
+  
 }];
 
   } catch (error) {
