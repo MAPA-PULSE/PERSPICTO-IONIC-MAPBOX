@@ -9,8 +9,8 @@ const AirQualityFilter: React.FC<{
     if (!map) return;
 
     const coordinatesList = [
-      { lat: 19.4326, lon: -99.1332 }, // Ciudad de México
-      { lat: 34.0522, lon: -118.2437 }, // Los Ángeles
+      { lat: 19.4326, lon: -99.1332 },
+      { lat: 34.0522, lon: -118.2437 },
     ];
 
     const dataPromises = coordinatesList.map(({ lat, lon }) =>

@@ -14,7 +14,6 @@ const AreaDrawFilter: React.FC<{
 
     const data = draw.current.getAll();
     console.log('Polígonos dibujados:', data);
-    // Aquí puedes aplicar cualquier filtro espacial con turf.js
   };
 
   const startDrawing = () => {

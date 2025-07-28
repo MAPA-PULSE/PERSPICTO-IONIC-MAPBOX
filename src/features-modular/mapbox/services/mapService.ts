@@ -1,7 +1,4 @@
-// src/features-modular/mapbox/services/mapService.ts
-//mapService.ts    Carga GeoJSON y clustering
 import type mapboxgl from 'mapbox-gl';
-
 const GEOJSON_PATH = '/assets/data/lugares.geojson';
 
 export function loadMarkers(map: mapboxgl.Map) {

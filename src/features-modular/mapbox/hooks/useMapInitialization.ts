@@ -1,4 +1,3 @@
-// hooks/useMapInitialization.ts
 import { useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { fetchEarthquakes } from '../services/quakeService';
@@ -28,7 +27,6 @@ const useMapInitialization = (
     map.on('load', async () => {
       map.scrollZoom.enable();
 
-      // === Viento ===
       map.addSource('wind', {
         type: 'raster',
         tiles: [
@@ -45,7 +43,6 @@ const useMapInitialization = (
         paint: { 'raster-opacity': 0.7 },
       });
 
-      // === Nubes ===
       map.addSource('clouds', {
         type: 'raster',
         tiles: [
@@ -62,7 +59,6 @@ const useMapInitialization = (
         paint: { 'raster-opacity': 0.6 },
       });
 
-      // === Animación de nubes ===
       let opacity = 0.6;
       let increasing = true;
       const cloudAnimation = setInterval(() => {
@@ -74,7 +70,6 @@ const useMapInitialization = (
         }
       }, 100);
 
-      // === Sismos ===
       const earthquakeData = await fetchEarthquakes();
       map.addSource('earthquakes', {
         type: 'geojson',
@@ -142,7 +137,6 @@ const useMapInitialization = (
         },
       });
 
-      // === Click interactivo ===
      map.on('click', async (e) => {
   const features = map.queryRenderedFeatures(e.point, {
     layers: ['earthquake-points', 'earthquake-heat'],
@@ -163,13 +157,11 @@ const useMapInitialization = (
       Coordenadas: ${coords[1].toFixed(2)}, ${coords[0].toFixed(2)}<br/>
     `;
 
-    // Mostrar solo el modal
     setModalContent(htmlContent);
     setTimeout(() => setShowModal(true), 0);
     return;
   }
 
-  // Clima + Calidad del Aire
   const { lng, lat } = e.lngLat;
   const [weather, air] = await Promise.all([
     fetchWeatherData(lat, lng),
@@ -212,8 +204,6 @@ const htmlContent = `
   PM10: ${aqiData?.components?.pm10 ?? 'N/A'} μg/m³<br/>
 `;
 
-
-  // Mostrar solo el modal
   setModalContent(htmlContent);
   setTimeout(() => setShowModal(true), 0);
 });

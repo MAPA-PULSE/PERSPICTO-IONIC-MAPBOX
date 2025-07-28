@@ -1,4 +1,3 @@
-// src/services/quakeService.ts
 import type { Earthquake } from '../types/quake.d';
 
 export async function fetchEarthquakes(startDate?: string, endDate?: string): Promise<Earthquake[]> {

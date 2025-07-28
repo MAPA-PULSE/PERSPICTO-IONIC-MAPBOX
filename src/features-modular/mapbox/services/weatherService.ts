@@ -1,4 +1,3 @@
-// src/services/weatherService.ts
 import type { WeatherData } from '../types/weather.d';
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_KEY;
@@ -28,7 +27,7 @@ export async function fetchWeatherData(lat: number, lon: number): Promise<Weathe
   visibility: weather.visibility,
   clouds: weather.clouds.all,
   icon: weather.weather[0].icon,
-  
+
 }];
 
   } catch (error) {

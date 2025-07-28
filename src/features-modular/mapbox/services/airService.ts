@@ -1,4 +1,3 @@
-// src/services/airService.ts
 import type { AirQualityData } from '../types/air.d';
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_KEY;
