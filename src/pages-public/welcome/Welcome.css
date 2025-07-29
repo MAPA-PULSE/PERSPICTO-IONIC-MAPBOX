@@ -1,6 +1,44 @@
-/* Necesitamaos el css*/ 
+/* Necesitamaos el css
+PERSPICTO-IONIC-MAPBOX\src\pages-public\welcome\Welcome.tsx*/ 
 .content-welcome>h1 {
   padding-top: 2rem;
   color: rgb(13, 58, 96);
 }
+
+@media (min-width: 768px) {
+  .content-welcome {
+    padding: 4rem 2rem;
+  }
+
+  ion-segment {
+    max-width: 500px;
+  }
+}
+
+.content-welcome {
+  position: relative; 
+  padding-bottom: 60px; 
+  min-height: 100vh; 
+}
+
+.content-welcome ion-segment {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px; /* alto típico de un tab */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+  padding: 0 10px;
+}
+
+/* Estilo para que los botones se vean bien en el tab */
+.content-welcome ion-segment-button {
+  flex: 1; /* que cada botón tome el mismo ancho */
+  font-weight: 600;
+}
+
 
