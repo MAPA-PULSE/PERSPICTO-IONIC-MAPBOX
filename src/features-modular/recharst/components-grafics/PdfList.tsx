@@ -18,7 +18,7 @@ const PdfList: React.FC = () => {
       const data = await res.json();
       setPdfs(data);
     } catch (err) {
-      console.error("❌ Error al cargar PDFs:", err);
+      console.error("Error al cargar PDFs:", err);
       setError("Error al cargar la lista de PDFs");
     }
   };

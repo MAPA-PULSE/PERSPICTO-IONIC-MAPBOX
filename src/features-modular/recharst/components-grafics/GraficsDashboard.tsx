@@ -25,7 +25,7 @@ const GraficsDashboard: React.FC = () => {
   const handleGenerateAndUploadPDF = async () => {
     try {
       const pdfBlob = await generatePDFBlobFromSVG();
-      await uploadPDFToMongo(pdfBlob, filename || "reporte_estadisticas.pdf");
+      await uploadPDFToMongo(pdfBlob, filename || "reporte_estadisticas");
       setToastMessage("PDF subido exitosamente a MongoDB");
     } catch (error) {
       console.error(error);
