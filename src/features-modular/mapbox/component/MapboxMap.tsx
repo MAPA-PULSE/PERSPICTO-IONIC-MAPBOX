@@ -83,6 +83,8 @@ return (
           gridTemplateRows: 'auto auto auto',
           rowGap: '1rem',
           width: 'fit-content',
+          
+          
         }}
       >
         <EarthquakeFilter mapInstanceRef={mapInstanceRef} />
