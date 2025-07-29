@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 import { useHistory } from "react-router-dom";
 import "./Welcome.css";
+import MapboxWelcome from "../../common/components/mapboxhome/MapboxWelcome";
 
 const Welcome: React.FC = () => {
   const history = useHistory();
@@ -28,7 +29,7 @@ const Welcome: React.FC = () => {
       <IonContent className="ion-padding content-welcome">
         <h1 className="welcome-heading">PERSPICTO</h1>
 
-
+        <MapboxWelcome />
         <IonSegment
           aria-label="Selector de acceso"
           role="radiogroup"
@@ -39,6 +40,7 @@ const Welcome: React.FC = () => {
             }
           }}
         >
+          
           <IonSegmentButton
             value="login"
             aria-label="Iniciar sesión"

@@ -15,8 +15,10 @@ import {
 import { User } from "../../index";
 import './ProfileViewEdit.css';
 
+
 interface ProfileViewEditProps {
   user: User;
+  image: Image;
   onSave: (updatedUser: User) => Promise<void>;
 }
 
@@ -41,8 +43,9 @@ const ProfileViewEdit: React.FC<ProfileViewEditProps> = ({ user, onSave }) => {
     </IonCardTitle>
   </IonCardHeader>
   <IonCardContent>
+
     <IonAvatar className="profile-avatar">
-      <img src={user.avatarUrl ?? "https://via.placeholder.com/150"} alt="Avatar" />
+      <img src={user.image ?? "/assets/jesus-olivia-wilson.png"} alt="Avatar" />
     </IonAvatar>
 
     {isEditing ? (
@@ -85,7 +88,7 @@ const ProfileViewEdit: React.FC<ProfileViewEditProps> = ({ user, onSave }) => {
       </IonCardHeader>
       <IonCardContent>
         <IonAvatar>
-          <img src={user.avatarUrl ?? "https://via.placeholder.com/150"} alt="Avatar" />
+          <img src={user.image ?? "/assets/jesus-olivia-wilson.png"} alt="Avatar" />
         </IonAvatar>
         <IonList>
           <IonItem>

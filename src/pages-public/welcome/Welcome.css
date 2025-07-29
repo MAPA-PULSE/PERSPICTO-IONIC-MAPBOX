@@ -2,12 +2,31 @@
 PERSPICTO-IONIC-MAPBOX\src\pages-public\welcome\Welcome.tsx*/ 
 .content-welcome>h1 {
   padding-top: 2rem;
-  color: rgb(13, 58, 96);
+  color: rgb(218, 237, 253);
+  z-index: 9999;
+  position: relative;
+  margin: auto;
+    /* Sombra para que el texto resalte más */
+  text-shadow: 0 2px 8px rgba(132, 188, 248, 0.85);
+ /* Desenfoque del fondo para mejor legibilidad */
+  backdrop-filter: blur(6px);
+  /* Opcional: letra con un poco de espacio  */
+  letter-spacing: 0.15rem;
+
+}
+
+.content-welcome{
+  justify-content: center;
+  margin: auto;
+  padding: 0;
+ align-items: center;
 }
 
 @media (min-width: 768px) {
   .content-welcome {
     padding: 4rem 2rem;
+     
+
   }
 
   ion-segment {

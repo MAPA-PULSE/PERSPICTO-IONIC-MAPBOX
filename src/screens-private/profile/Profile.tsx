@@ -8,6 +8,7 @@ import { auth } from "../../common/firebase/firebase";
 import { useHistory } from "react-router-dom";
 import "./Profile.css"
 //import { CustomButtonProps } from "../../common/components/custtombutton/CustomButton";
+import {ImgOlivia} from "../../../public/assets/jesus-olivia-wilson.png"
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
