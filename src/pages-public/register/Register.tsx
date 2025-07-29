@@ -43,7 +43,7 @@ const Register: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen className="ion-padding register-content ion-text-center">
+      <IonContent  className="ion-padding register-content ion-text-center">
         <IonGrid>
           <IonRow className="ion-justify-content-center">
             <IonCol size="12" sizeMd="6" sizeLg="4">

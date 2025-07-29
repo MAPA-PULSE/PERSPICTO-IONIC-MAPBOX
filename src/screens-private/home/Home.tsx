@@ -15,8 +15,8 @@ const Home: React.FC = () => {
 
   return (
   <IonPage>
-  <IonContent fullscreen>
-    <div className="home-container" style={{ height: '100vh',width:'100vw' }}>
+  <IonContent > 
+    <div className="home-container" style={{ height: '100vh',width:'100vw', position:'absolute' }}>
       <MapboxMap onMapLoad={handleMapLoad} />
     </div>
   </IonContent>

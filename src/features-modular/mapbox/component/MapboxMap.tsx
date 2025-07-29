@@ -18,6 +18,7 @@ import '../../../theme/globals.css';
 // import { fetchWeatherData } from '../services/weatherService';
 // import { fetchAirQuality } from '../services/airService';
 import { useDeviceType } from '../hooks/useDeviceType'; // responsive
+import "../../../screens-private/home/Home.css"
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -45,21 +46,21 @@ const MapboxMap: React.FC = () => {
 
   return (
    <IonPage >
-    <IonContent fullscreen>
-  <IonSegment >
-    <div style={{ position: 'absolute', top: '2vh', left: '4vw', right: '4vw', zIndex: 20 }}>
-      <SearchBox
-        accessToken={mapboxgl.accessToken!}
-        mapboxgl={mapboxgl}
-        map={mapInstanceRef.current!}
-        value="Buscar ciudad, país o región"
-        onChange={() => {}}
-        marker={false}
-        types={['place', 'region', 'country']}
-      />
-    </div>
-  <IonSegment  className='box-filters'>
-    <div 
+    
+      <IonSegment >
+        <div style={{ position: 'absolute', top: '2vh', left: '4vw', right: '4vw', zIndex: 20 }}>
+          <SearchBox
+            accessToken={mapboxgl.accessToken!}
+            mapboxgl={mapboxgl}
+            map={mapInstanceRef.current!}
+            value="Buscar ciudad, país o región"
+            onChange={() => {}}
+            marker={false}
+            types={['place', 'region', 'country']}
+          />
+        </div>
+      <IonSegment  className='box-filters'>
+    <div
       style={{
         position: 'relative',
         top: '12vh',
@@ -87,7 +88,7 @@ const MapboxMap: React.FC = () => {
     <div
       ref={mapContainer}
       style={{
-        position: 'absolute',
+        position: 'relative',
         top: 0,
         left: 0,
         width: '100vw',
@@ -95,9 +96,9 @@ const MapboxMap: React.FC = () => {
       }}
     />
 
-    
+
   </IonSegment>
-  </IonContent>
+
 </IonPage>
 
   );

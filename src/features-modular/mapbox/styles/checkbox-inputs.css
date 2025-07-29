@@ -1,6 +1,10 @@
+/*PERSPICTO-IONIC-MAPBOX\src\features-modular\mapbox\styles\checkbox-inputs.css*/
+
 .box-filters{
      display: 'grid';
      grid-template-rows: auto auto auto;
      z-index: 30;
      width: fit-content;
 }
+
+

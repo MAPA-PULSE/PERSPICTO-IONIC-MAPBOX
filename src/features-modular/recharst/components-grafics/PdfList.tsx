@@ -1,5 +1,9 @@
+//PERSPICTO-IONIC-MAPBOX\src\features-modular\recharst\components-grafics\PdfList.tsx
+
 import React, { useEffect, useState } from "react";
 import API_BASE_URL from "../../../common/api/api";
+import { IonButton } from "@ionic/react";
+
 
 interface PdfFile {
   id: string;
@@ -54,12 +58,14 @@ const PdfList: React.FC = () => {
         {pdfs.map((pdf) => (
           <li key={pdf.id} style={{ marginBottom: "12px" }}>
             <strong>{pdf.filename}</strong> — {pdf.uploadDate?.slice(0, 10) || "Sin fecha"}
-            <button
+            <IonButton
               onClick={() => downloadPdf(pdf.id, pdf.filename)}
+              color = "primary"
+              size="small"
               style={{ marginLeft: "10px" }}
             >
               Descargar
-            </button>
+            </IonButton>
           </li>
         ))}
       </ul>
