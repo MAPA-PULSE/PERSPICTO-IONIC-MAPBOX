@@ -1,4 +1,4 @@
-// Check de capas viento, sismo , corriente aire
+// PERSPICTO-IONIC-MAPBOX\src\features-modular\mapbox\component\LayerControls.tsx  Check de capas viento, sismo , corriente aire
 import React from 'react';
 
 const LayerControls: React.FC<{

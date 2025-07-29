@@ -60,7 +60,9 @@
   }
 }
 
-
+.mapboxgl-popup-content {
+  color: rgb(39, 39, 39);
+}
 
 
 /* Estilo letra global */

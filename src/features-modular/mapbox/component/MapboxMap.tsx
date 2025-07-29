@@ -45,8 +45,8 @@ const MapboxMap: React.FC = () => {
   }, []);
 
   return (
-   <IonPage >
-    
+    <IonPage >
+
       <IonSegment >
         <div style={{ position: 'absolute', top: '2vh', left: '4vw', right: '4vw', zIndex: 20 }}>
           <SearchBox
@@ -54,52 +54,52 @@ const MapboxMap: React.FC = () => {
             mapboxgl={mapboxgl}
             map={mapInstanceRef.current!}
             value="Buscar ciudad, país o región"
-            onChange={() => {}}
+            onChange={() => { }}
             marker={false}
             types={['place', 'region', 'country']}
           />
         </div>
-      <IonSegment  className='box-filters'>
-    <div
-      style={{
-        position: 'relative',
-        top: '12vh',
-        left: '4vw',
-        zIndex: 30,
-        backgroundColor: 'white',
-        padding: '1rem',
-        borderRadius: '8px',
-        gridTemplateRows: 'auto auto auto', // o `repeat(3, auto)`
-        rowGap: '1rem', // espacio entre filtros
-        width: 'fit-content', // o un width fijo si lo prefieres
-      }}
-    >
-      <EarthquakeFilter mapInstanceRef={mapInstanceRef} /> // 3 filtros en negro
-      <AirQualityFilter mapInstanceRef={mapInstanceRef} />
-      <WeatherFilter mapInstanceRef={mapInstanceRef} />
-    </div>
+        <IonSegment className='box-filters'>
+          <div
+            style={{
+              position: 'relative',
+              top: '12vh',
+              left: '4vw',
+              zIndex: 10,
+              backgroundColor: 'white',
+              padding: '1rem',
+              borderRadius: '8px',
+              gridTemplateRows: 'auto auto auto', // o `repeat(3, auto)`
+              rowGap: '1rem', // espacio entre filtros
+              width: 'fit-content', // o un width fijo si lo prefieres
+            }}
+          >
+            <EarthquakeFilter mapInstanceRef={mapInstanceRef} /> // 3 filtros en negro
+            <AirQualityFilter mapInstanceRef={mapInstanceRef} />
+            <WeatherFilter mapInstanceRef={mapInstanceRef} />
+          </div>
 
 
-    <LayerControls layerVisibility={layerVisibility} setLayerVisibility={setLayerVisibility} />
-    </IonSegment>
+          <LayerControls layerVisibility={layerVisibility} setLayerVisibility={setLayerVisibility} />
+        </IonSegment>
 
-    <ModalInfo isOpen={showModal} onClose={() => setShowModal(false)} content={modalContent} />
+        <ModalInfo isOpen={showModal} onClose={() => setShowModal(false)} content={modalContent} />
 
-    <div
-      ref={mapContainer}
-      style={{
-        position: 'relative',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-      }}
-    />
+        <div
+          ref={mapContainer}
+          style={{
+            position: 'relative',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+          }}
+        />
 
 
-  </IonSegment>
+      </IonSegment>
 
-</IonPage>
+    </IonPage>
 
   );
 };
