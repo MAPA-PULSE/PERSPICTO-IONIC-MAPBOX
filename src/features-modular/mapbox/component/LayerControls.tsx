@@ -7,7 +7,7 @@ const LayerControls: React.FC<{
     React.SetStateAction<{ wind: boolean; clouds: boolean; earthquake: boolean }>
   >;
 }> = ({ layerVisibility, setLayerVisibility }) => (
-  <div style={{ position: 'absolute', top: '12vh', left: '4vw', zIndex: 30, backgroundColor: 'white', padding: '1rem', borderRadius: '8px' }}>
+  <div style={{ top: '12vh', left: '4vw', zIndex: 30, backgroundColor: 'white', padding: '1rem', borderRadius: '8px', color:'black' }}>
     {['wind', 'clouds', 'earthquake'].map((layer) => (
       <label key={layer}>
         <input

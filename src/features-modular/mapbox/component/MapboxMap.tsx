@@ -51,7 +51,7 @@ return (
       {/* 🔍 SearchBox fijo arriba */}
       <div
         style={{
-          position: 'absolute',
+          position: 'relative',
           top: '2vh',
           left: '4vw',
           right: '4vw',
@@ -90,12 +90,13 @@ return (
         <EarthquakeFilter mapInstanceRef={mapInstanceRef} />
         <AirQualityFilter mapInstanceRef={mapInstanceRef} />
         <WeatherFilter mapInstanceRef={mapInstanceRef} />
+        <LayerControls
+           layerVisibility={layerVisibility}
+           setLayerVisibility={setLayerVisibility}
+         />
       </div>
 
-      <LayerControls
-        layerVisibility={layerVisibility}
-        setLayerVisibility={setLayerVisibility}
-      />
+  
 
       <ModalInfo
         isOpen={showModal}
