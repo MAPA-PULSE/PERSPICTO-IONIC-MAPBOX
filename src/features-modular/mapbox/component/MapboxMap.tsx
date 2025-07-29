@@ -44,64 +44,78 @@ const MapboxMap: React.FC = () => {
     return handleMapClick(map, setModalContent, setShowModal);
   }, []);
 
-  return (
-    <IonPage >
+return (
+  <IonPage>
+    <IonContent>
 
-      <IonSegment >
-        <div style={{ position: 'absolute', top: '2vh', left: '4vw', right: '4vw', zIndex: 20 }}>
-          <SearchBox
-            accessToken={mapboxgl.accessToken!}
-            mapboxgl={mapboxgl}
-            map={mapInstanceRef.current!}
-            value="Buscar ciudad, país o región"
-            onChange={() => { }}
-            marker={false}
-            types={['place', 'region', 'country']}
-          />
-        </div>
-        <IonSegment className='box-filters'>
-          <div
-            style={{
-              position: 'relative',
-              top: '12vh',
-              left: '4vw',
-              zIndex: 10,
-              backgroundColor: 'white',
-              padding: '1rem',
-              borderRadius: '8px',
-              gridTemplateRows: 'auto auto auto', // o `repeat(3, auto)`
-              rowGap: '1rem', // espacio entre filtros
-              width: 'fit-content', // o un width fijo si lo prefieres
-            }}
-          >
-            <EarthquakeFilter mapInstanceRef={mapInstanceRef} /> // 3 filtros en negro
-            <AirQualityFilter mapInstanceRef={mapInstanceRef} />
-            <WeatherFilter mapInstanceRef={mapInstanceRef} />
-          </div>
-
-
-          <LayerControls layerVisibility={layerVisibility} setLayerVisibility={setLayerVisibility} />
-        </IonSegment>
-
-        <ModalInfo isOpen={showModal} onClose={() => setShowModal(false)} content={modalContent} />
-
-        <div
-          ref={mapContainer}
-          style={{
-            position: 'relative',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-          }}
+      {/* 🔍 SearchBox fijo arriba */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '2vh',
+          left: '4vw',
+          right: '4vw',
+          zIndex: 9999, // 🧠 que esté por encima del mapa
+        }}
+      >
+        <SearchBox
+          accessToken={mapboxgl.accessToken!}
+          mapboxgl={mapboxgl}
+          map={mapInstanceRef.current!}
+          value="Buscar ciudad, país o región"
+          onChange={() => {}}
+          marker={false}
+          types={['place', 'region', 'country']}
         />
+      </div>
 
+      {/* 🎛️ Filtros visibles y posicionados */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '12vh',
+          left: '4vw',
+          zIndex: 9999,
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          padding: '1rem',
+          borderRadius: '8px',
+          display: 'grid',
+          gridTemplateRows: 'auto auto auto',
+          rowGap: '1rem',
+          width: 'fit-content',
+        }}
+      >
+        <EarthquakeFilter mapInstanceRef={mapInstanceRef} />
+        <AirQualityFilter mapInstanceRef={mapInstanceRef} />
+        <WeatherFilter mapInstanceRef={mapInstanceRef} />
+      </div>
 
-      </IonSegment>
+      <LayerControls
+        layerVisibility={layerVisibility}
+        setLayerVisibility={setLayerVisibility}
+      />
 
-    </IonPage>
+      <ModalInfo
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        content={modalContent}
+      />
 
-  );
+      <div
+        ref={mapContainer}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+        }}
+      />
+    </IonContent>
+  </IonPage>
+);
+
 };
 
 export default MapboxMap;
