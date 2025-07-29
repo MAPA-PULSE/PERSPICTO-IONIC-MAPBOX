@@ -1,5 +1,5 @@
 .box-filters{
-     display: 'grid',
+     display: 'grid';
      grid-template-rows: auto auto auto;
      z-index: 30;
      width: fit-content;

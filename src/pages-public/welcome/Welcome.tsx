@@ -6,7 +6,8 @@ import {
   IonSegmentButton,
   IonLabel,
   IonHeader,
-  IonTitle
+  IonTitle,
+  IonToolbar
 } from "@ionic/react";
 import { useHistory } from "react-router-dom";
 import "./Welcome.css";
@@ -25,9 +26,8 @@ const Welcome: React.FC = () => {
   return (
     <IonPage>
       <IonContent className="ion-padding content-welcome">
-        <IonHeader>
-          <IonTitle id="welcome-heading">PERSPICTO</IonTitle>
-        </IonHeader>
+        <h1 className="welcome-heading">PERSPICTO</h1>
+
 
         <IonSegment
           aria-label="Selector de acceso"

@@ -44,8 +44,9 @@ const MapboxMap: React.FC = () => {
   }, []);
 
   return (
-   <IonPage>
-  <IonSegment fullscreen>
+   <IonPage >
+    <IonContent fullscreen>
+  <IonSegment >
     <div style={{ position: 'absolute', top: '2vh', left: '4vw', right: '4vw', zIndex: 20 }}>
       <SearchBox
         accessToken={mapboxgl.accessToken!}
@@ -96,6 +97,7 @@ const MapboxMap: React.FC = () => {
 
     
   </IonSegment>
+  </IonContent>
 </IonPage>
 
   );

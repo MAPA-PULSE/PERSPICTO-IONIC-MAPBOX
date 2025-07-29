@@ -7,6 +7,7 @@ import ProfileViewEdit from "./ProfileViewEdit";
 import { auth } from "../../common/firebase/firebase";
 import { useHistory } from "react-router-dom";
 import "./Profile.css"
+//import { CustomButtonProps } from "../../common/components/custtombutton/CustomButton";
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -109,7 +110,7 @@ const Profile: React.FC = () => {
           duration={3000}
           onDidDismiss={() => setShowToast(false)}
         />
-      </IonContent>
+       </IonContent>
     </IonPage>
   );
 };

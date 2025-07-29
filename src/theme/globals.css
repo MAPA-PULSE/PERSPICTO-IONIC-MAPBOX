@@ -27,11 +27,11 @@
 }
 
 /* En tu archivo globals.css o un nuevo archivo */
-.custom-modal  {
+/* .custom-modal  {
   z-index: 9999 !important;
   position: relative !important;
   color: var(--ion-color-secondary-contrast);
-}
+} */
 
 
 .filters-container {
