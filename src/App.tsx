@@ -11,9 +11,11 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { ellipse, square, triangle } from 'ionicons/icons';
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
+import { usePushNotifications } from './common/hooks/usePushNotifications'; // ✅ Importa el hook
+
+// import Tab1 from './pages/Tab1';
+// import Tab2 from './pages/Tab2';
+// import Tab3 from './pages/Tab3';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -46,18 +48,27 @@ import '@ionic/react/css/palettes/dark.system.css';
 import './theme/variables.css';
 import AppRoutes from './routes/AppRoutes';
 import { ThemeProvider } from './common/context/ThemeContext';
+import { useFirebaseMessaging } from './common/hooks/useFirebaseMessaging'; // ✅ Importa el hook de Firebase Messaging
 
 setupIonicReact();
+const userId = 25;
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <ThemeProvider>
-        <AppRoutes />
+const App: React.FC = () => {
+  usePushNotifications();
+
+  useFirebaseMessaging(userId);
+
+  return (
+    
+    <IonApp>
+      <IonReactRouter>
+        <ThemeProvider>
+          <AppRoutes />
       </ThemeProvider>
     </IonReactRouter>
 
   </IonApp>
-);
+  );
+}
 
 export default App;

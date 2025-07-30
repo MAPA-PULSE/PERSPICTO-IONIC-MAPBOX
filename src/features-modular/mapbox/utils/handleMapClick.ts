@@ -40,7 +40,7 @@ const handleMapClick = (
     const aqi = air?.list?.[0]?.main?.aqi;
     const aqiData = air?.list?.[0];
 
-    const getAqiLabel = (val: number) => ['Bueno', 'Aceptable', 'Moderado', 'Malo', 'Muy malo'][val - 1] || 'N/A';
+    const getAqiLabel = (val: string) => ['Bueno', 'Aceptable', 'Moderado', 'Malo', 'Muy malo'][val - 1] || 'N/A';
 
     const aqiContent =
       aqi !== undefined ? `${aqi} (${getAqiLabel(aqi)})` : 'Datos no disponibles';

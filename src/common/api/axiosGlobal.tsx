@@ -1,10 +1,8 @@
- /* ⚠️ Instancia de ESTADO GLOBAL para axios configurada PRUEBA (baseURL, interceptores)
-/features */
-// /common/apiClient.ts
+//REFERENCIA LOCALHOST
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'https://mi-backend-fastapi.com/api',
+  baseURL: 'http://localhost:8000',
   timeout: 10000,
 });
 

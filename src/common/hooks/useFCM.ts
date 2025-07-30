@@ -10,11 +10,11 @@ export const useFCM = (userId: number) => {
 
       try {
         const token = await FirebaseX.getToken();
-        console.log("📲 Token:", token);
-        await sendTokenToBackend(token, userId);
+        console.log("Token:", token);
+        await sendTokenToBackend(token ?? "", userId);
 
         FirebaseX.onMessageReceived().subscribe((data) => {
-          console.log("🔥 Notificación recibida:", data);
+          console.log("Notificación recibida:", data);
           alert(`${data.title}: ${data.body}`);
         });
       } catch (err) {
