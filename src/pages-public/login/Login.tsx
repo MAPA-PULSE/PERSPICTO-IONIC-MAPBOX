@@ -39,7 +39,7 @@ const Login: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen className="ion-padding ion-text-center login-content">
+      <IonContent className="ion-padding ion-text-center login-content">
         <IonGrid>
           <IonRow className="ion-justify-content-center">
             <IonCol size="12" sizeMd="6" sizeLg="4">
@@ -73,7 +73,7 @@ const Login: React.FC = () => {
 
               <IonButton
                 expand="block"
-                color="primary"
+                color="success"
                 onClick={onLogin}
                 disabled={loading || !email || !password}
                 className="ion-margin-top"

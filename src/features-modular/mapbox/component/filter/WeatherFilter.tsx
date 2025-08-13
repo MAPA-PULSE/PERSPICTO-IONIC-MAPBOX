@@ -33,7 +33,7 @@ const WeatherFilter: React.FC<{
   return (
     <select
       onChange={(e) => handleWeatherRange(parseInt(e.target.value))}
-      style={{ position: 'absolute', top: '9vh', left: '4vw', zIndex: 20 }}
+      style={{ top: '9vh', left: '4vw', zIndex: 20 }}
     >
       <option value="">Clima actual</option>
       <option value="1">Hoy</option>

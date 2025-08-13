@@ -1,6 +1,17 @@
-import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
+//PERSPICTO-IONIC-MAPBOX\src\pages-public\welcome\Welcome.tsx
+import {
+  IonPage,
+  IonContent,
+  IonSegment,
+  IonSegmentButton,
+  IonLabel,
+  IonHeader,
+  IonTitle,
+  IonToolbar
+} from "@ionic/react";
 import { useHistory } from "react-router-dom";
 import "./Welcome.css";
+import MapboxWelcome from "../../common/components/mapboxhome/MapboxWelcome";
 
 const Welcome: React.FC = () => {
   const history = useHistory();
@@ -16,21 +27,36 @@ const Welcome: React.FC = () => {
   return (
     <IonPage>
       <IonContent className="ion-padding content-welcome">
-        <h1>Bienvenido a mi App</h1>
+        <h1 className="welcome-heading">PERSPICTO</h1>
 
+        <MapboxWelcome />
         <IonSegment
-          onIonChange={e => {
+          aria-label="Selector de acceso"
+          role="radiogroup"
+          onIonChange={(e) => {
             const value = e.detail.value as string | undefined;
             if (value) {
               handleSegmentChange(value);
             }
           }}
+        >
+          
+          <IonSegmentButton
+            value="login"
+            aria-label="Iniciar sesión"
+            role="radio"
+            aria-checked="false"
           >
-          <IonSegmentButton value="login">
-            <IonLabel onClick={() => handleSegmentChange("login")}>Iniciar Sesión</IonLabel>
+            <IonLabel>Iniciar Sesión</IonLabel>
           </IonSegmentButton>
-          <IonSegmentButton value="register">
-            <IonLabel onClick={() => handleSegmentChange("register")}>Registrarse</IonLabel>
+
+          <IonSegmentButton
+            value="register"
+            aria-label="Registrarse"
+            role="radio"
+            aria-checked="false"
+          >
+            <IonLabel>Registrarse</IonLabel>
           </IonSegmentButton>
         </IonSegment>
       </IonContent>

@@ -1,3 +1,4 @@
+// Info Modal Detalles en grande OK
 import React from 'react';
 import { IonModal, IonButton } from '@ionic/react';
 

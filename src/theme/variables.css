@@ -1,5 +1,6 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+/*PERSPICTO-IONIC-MAPBOX\src\theme\variables.css */
 
 /* Revisar los colores de la app */
 
@@ -10,14 +11,21 @@ http://ionicframework.com/docs/theming/ */
   --card-background-color: #f2f2f2;
 
   /* Texto */
-  --ion-text-color: #0e4b52;
+  --ion-text-color: #2699a6;
 
   /* Colores Ionic */
   --ion-color-primary: #62d4ff;
   --ion-color-secondary: #72d1d2;
 
-  --ion-color-primary-contrast: #ffffff;
-  --ion-color-secondary-contrast: #0e4b52;
+  --ion-color-primary-contrast: #63a3f8;
+  --ion-color-secondary-contrast: #0c3539;
+
+  /* Estilos TABS */
+    ion-tab-bar {
+    --background: #ffffff; /* Fondo general del tab bar */
+    --color:  #63a3f8;      /* Color de texto e iconos inactivos */
+    --color-selected:#ff7f00;/* Color de texto e icono activo */
+    }
 }
 
 /* === Tema OSCURO === */
@@ -28,7 +36,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-text-color: #ffffff;
 
   --ion-color-primary: #ff7f00;
-  --ion-color-secondary: #145c66;
+  --ion-color-secondary: #63a3f8;
 
   --ion-color-primary-contrast: #011421;
   --ion-color-secondary-contrast: #ffffff;

@@ -1,0 +1,41 @@
+/*Espacios entre inputs*/
+ion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* o 1.5rem si quieres más aire */
+  padding-top: 0.5rem;
+}
+
+
+ion-list ion-item {
+  margin-bottom: 1rem;
+}
+
+/* Efecto botón*/
+.register-button {.register-button {
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  --border-radius: 8px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  font-weight: 500;
+  font-size: 1rem;
+  transition: filter 0.2s ease;
+}
+
+.register-button:hover,
+.register-button:focus {
+  filter: brightness(0.95);
+}
+
+.register-button:active {
+  filter: brightness(0.88);
+}
+  margin-top: 1rem;
+  padding: 1.2rem 1rem; /* controla la altura / espacio interior */
+  font-size: 1rem; /* opcional: más legible */
+  --border-radius: 8px; /* suaviza bordes */
+
+}
+
+
+

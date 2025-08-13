@@ -1,0 +1,19 @@
+
+/* Centrado del contenido del perfil
+ PERSPICTO-IONIC-MAPBOX\src\screens-private\profile\Profile.css*/
+.profile-page-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Botón de eliminar y logout con animaciones suaves */
+.profile-action-button {
+  margin-top: 8px;
+  transition: filter 0.3s ease;
+}
+
+.profile-action-button:hover {
+  filter: brightness(1.1);
+}

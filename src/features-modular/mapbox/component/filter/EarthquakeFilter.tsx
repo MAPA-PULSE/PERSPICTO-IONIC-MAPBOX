@@ -39,7 +39,7 @@ const EarthquakeFilter: React.FC<{
   return (
     <select
       onChange={(e) => handlePresetRange(parseInt(e.target.value))}
-      style={{ position: 'absolute', top: '6vh', left: '4vw', zIndex: 20 }}
+      style={{ top: '6vh', left: '4vw', zIndex: 20 }}
     >
       <option value="">Selecciona rango</option>
       <option value="1">Hoy</option>

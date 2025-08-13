@@ -1,3 +1,4 @@
+// PERSPICTO-IONIC-MAPBOX\src\pages-public\register\Register.tsx
 import {
   IonPage,
   IonContent,
@@ -42,14 +43,14 @@ const Register: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen className="ion-padding register-content ion-text-center">
+      <IonContent  className="ion-padding register-content ion-text-center">
         <IonGrid>
           <IonRow className="ion-justify-content-center">
             <IonCol size="12" sizeMd="6" sizeLg="4">
               <h2 className="title">Crear cuenta</h2>
 
               <IonList>
-                <IonItem>
+                <IonItem >
                   <IonLabel position="floating">Nombre completo</IonLabel>
                   <IonInput
                     value={name}
@@ -59,7 +60,7 @@ const Register: React.FC = () => {
                   />
                 </IonItem>
 
-                <IonItem>
+                <IonItem >
                   <IonLabel position="floating">Correo electrónico</IonLabel>
                   <IonInput
                     type="email"
@@ -86,20 +87,20 @@ const Register: React.FC = () => {
 
               <IonButton
                 expand="block"
-                color="medium"
+                color="danger"
                 onClick={clearFields}
                 disabled={loading}
-                className="ion-margin-top"
+                className="ion-margin-top register-button"
               >
                 Limpiar
               </IonButton>
 
               <IonButton
                 expand="block"
-                color="success"
+                color="primary"
                 onClick={onRegister}
                 disabled={loading || !name || !email || !password}
-                className="ion-margin-top"
+                className="ion-margin-top register-button"
               >
                 {loading ? <IonSpinner name="crescent" /> : "Registrarse"}
               </IonButton>
@@ -116,7 +117,7 @@ const Register: React.FC = () => {
           message={toastMessage}
           duration={3000}
           position="bottom"
-          color="danger"
+          color="tertiary"
           onDidDismiss={() => setShowToast(false)}
         />
       </IonContent>

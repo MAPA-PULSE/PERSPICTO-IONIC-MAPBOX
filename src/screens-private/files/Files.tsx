@@ -6,7 +6,7 @@ const Files: React.FC = () => {
   return (
     <IonPage  >
       <IonContent className="ion-padding">
-        <h1>Files</h1>
+        <h1>Registro de documentos</h1>
         <PdfList />
       </IonContent>
     </IonPage>

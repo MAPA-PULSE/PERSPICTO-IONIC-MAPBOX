@@ -1,6 +1,74 @@
-/* Necesitamaos el css*/ 
+/* Necesitamaos el css
+PERSPICTO-IONIC-MAPBOX\src\pages-public\welcome\Welcome.tsx*/ 
 .content-welcome>h1 {
   padding-top: 2rem;
-  color: rgb(13, 58, 96);
+  color: rgb(218, 237, 253);
+  z-index: 9999;
+  position: relative;
+  margin: auto;
+    /* Sombra para que el texto resalte más */
+  text-shadow: 0 2px 8px rgba(132, 188, 248, 0.85);
+ /* Desenfoque del fondo para mejor legibilidad */
+  backdrop-filter: blur(6px);
+  /* Opcional: letra con un poco de espacio  */
+  letter-spacing: 0.15rem;
+
 }
+
+.content-welcome{
+  justify-content: center;
+  margin: auto;
+  padding: 0;
+ align-items: center;
+}
+
+@media (min-width: 768px) {
+  .content-welcome {
+    padding: 4rem 2rem;
+     
+
+  }
+
+  ion-segment {
+    max-width: 500px;
+  }
+}
+
+.content-welcome {
+  position: relative; 
+  padding-bottom: 60px; 
+  min-height: 100vh; 
+}
+
+.content-welcome ion-segment {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px; /* alto típico de un tab */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+  padding: 0 10px;
+}
+
+/* Estilo para que los botones se vean bien en el tab */
+.content-welcome ion-segment-button {
+  flex: 1; /* que cada botón tome el mismo ancho */
+  font-weight: 600;
+}
+
+.welcome-heading {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: rgb(13, 58, 96);
+  margin-top: 2rem;
+  letter-spacing: 1px;
+}
+
+
+
 

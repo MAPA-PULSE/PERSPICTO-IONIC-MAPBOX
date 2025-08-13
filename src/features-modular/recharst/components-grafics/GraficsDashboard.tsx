@@ -101,12 +101,12 @@ const GraficsDashboard: React.FC = () => {
 
               <IonButton onClick={refetch} color="primary">
                 <IonIcon icon={refresh} slot="start" />
-                Actualizar
+                Actualizar Info
               </IonButton>
 
               <IonButton color="success" onClick={handleSavePDF}>
                 <IonIcon icon={save} slot="start" />
-                Guardar como PDF
+                Guardar PDF
               </IonButton>
 
               <IonButton color="medium" onClick={handleDownloadJSON}>
@@ -116,12 +116,12 @@ const GraficsDashboard: React.FC = () => {
 
               <IonButton color="tertiary" onClick={handleUploadJSON}>
                 <IonIcon icon={cloudUpload} slot="start" />
-                Guardar JSON en MongoDB
+                Guardar JSON DataBase {/*en MongoDB */} 
               </IonButton>
 
               <IonButton color="warning" onClick={handleGenerateAndUploadPDF}>
                 <IonIcon icon={cloudUpload} slot="start" />
-                Subir PDF a MongoDB
+                Subir PDF Files{/*a MongoDB*/}
               </IonButton>
             </div>
             <IonItem>

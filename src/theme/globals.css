@@ -1,26 +1,37 @@
-/* global.css */
+/* PERSPICTO-IONIC-MAPBOX\src\theme\globals.css */
+
+/* Estilo base para botones del segmento */
+.segment-button-custom {
+  background-color: none;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.25);
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 4rem;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
+}
+
+.labelbtn{
+    background-color: transparent;
+}
+
+/* Efecto de toque */
+.segment-button-custom:active {
+  transform: scale(0.97);
+}
+
+
 .marker-animated {
   animation: fadeInZoom 0.5s ease-out;
 }
 
-@keyframes fadeInZoom {
-  0% {
-    transform: scale(0.3);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-
 /* En tu archivo globals.css o un nuevo archivo */
-.custom-modal  {
+/* .custom-modal  {
   z-index: 9999 !important;
   position: relative !important;
   color: var(--ion-color-secondary-contrast);
-}
+} */
 
 
 .filters-container {
@@ -48,3 +59,12 @@
     box-shadow: none;
   }
 }
+
+.mapboxgl-popup-content {
+  color: rgb(39, 39, 39);
+}
+
+
+/* Estilo letra global */
+
+/* */

@@ -1,3 +1,4 @@
+//PERSPICTO-IONIC-MAPBOX\src\features-modular\mapbox\utils\handleMapClick.ts
 import mapboxgl from 'mapbox-gl';
 import { fetchWeatherData } from '../services/weatherService';
 import { fetchAirQuality } from '../services/airService';
